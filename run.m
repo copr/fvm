@@ -6,8 +6,8 @@ v.e_is_d = true;
 v.n_is_d = true;
 v.s_is_d = true;
 v.w_is_d = true;
-u.e = 1;
-u.n = 0;
+u.e = 0;
+u.n = 1;
 u.s = 0;
 u.w = 0;
 u.e_is_d = true;
@@ -18,8 +18,8 @@ bounds.u = u;
 
 types.ntype = 1; %inlet
 types.wtype = 0; %wall
-types.etype = 0; %wall
-types.stype = 2; %outlet
+types.etype = 2; %wall
+types.stype = 0; %outlet
 
 bounds.types = types;
 

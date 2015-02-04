@@ -12,7 +12,9 @@ alfaU = 0.8; %relaxace rychlosti
 alfaP = 0.3; %relaxace tlaku
 it = 0;
 while it < 30 && ~convergence(sources(2:end-1,2:end-1), my_ep)
-    it = it + 1;
+    [ustar, vstar] = checkOutlet(bounds, ustar, vstar);
+    
+    it = it + 1
     [Mu, vectorU] = generateMomentumEqsU(pstar, ustar, vstar, bounds, ro, gama, Su, Sp, deltaX, deltaY, alfaU, uold);
     [Mv, vectorV] = generateMomentumEqsV(pstar, ustar, vstar, bounds, ro, gama, Su, Sp, deltaX, deltaY, alfaU, vold);
     
@@ -45,6 +47,7 @@ while it < 30 && ~convergence(sources(2:end-1,2:end-1), my_ep)
    % waitforbuttonpress;
     
     %initUVPstar(nx, ny, bounds, zeros(unx,uny), zeros(vnx, vny), pstar)
+    
 end
 it
 ustar = uold;
