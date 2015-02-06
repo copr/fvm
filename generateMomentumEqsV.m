@@ -30,7 +30,7 @@ for i=1:vny
         Ds = gama/deltaY;
         Dn = gama/deltaY;
 
-        [ae, aw, an, as, be, bw, bn, bs, Spom] = hybrid(index, j, i, Fe, Fw, Fn, Fs, ...
+        [ae, aw, an, as, be, bw, bn, bs, Spom] = hybrid(index, obj, obi, Fe, Fw, Fn, Fs, ...
             De, Dw, Dn, Ds, Su, Spom, deltaX, deltaY, urb, vm, bounds.v, vnx, vny, 1, vstar);% zatim to asi nefachci pro outlet
         ap = as + an + ae + aw - Spom;
         Source = Su + (pstar(obj, obi) - pstar(obj+1, obi))*deltaX + be + bw + bn + bs + (1-alfa)*(ap/alfa)*vold(obj,obi);

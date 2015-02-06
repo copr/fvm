@@ -11,10 +11,10 @@ sources = ones(pnx,pny);
 alfaU = 0.8; %relaxace rychlosti
 alfaP = 0.3; %relaxace tlaku
 it = 0;
-while it < 30 && ~convergence(sources(2:end-1,2:end-1), my_ep)
+while it < 1000 && ~convergence(sources(2:end-1,2:end-1), my_ep)
     [ustar, vstar] = checkOutlet(bounds, ustar, vstar);
     
-    it = it + 1
+    it = it + 1;
     [Mu, vectorU] = generateMomentumEqsU(pstar, ustar, vstar, bounds, ro, gama, Su, Sp, deltaX, deltaY, alfaU, uold);
     [Mv, vectorV] = generateMomentumEqsV(pstar, ustar, vstar, bounds, ro, gama, Su, Sp, deltaX, deltaY, alfaU, vold);
     
@@ -36,7 +36,12 @@ while it < 30 && ~convergence(sources(2:end-1,2:end-1), my_ep)
     
     [Mp, vectorP, sources] = generetaPresureCorrectEqs(pstar, ustar, vstar, bounds, ro, gama, Su, Sp, deltaX, deltaY, Mu, Mv, sources, alfaU);
 
-%     pcomma = Mp\vectorP; musel by se pouzit upevneni tlaku 
+    
+%     Mp(1, :) = zeros(1, length(Mp(1,:)));
+%     Mp(1,1) = 1;
+%     vectorP(1) = 1; %upevneni tlaku
+%     pcomma = Mp\vectorP; 
+    
     pcomma = pcg_chol(Mp, vectorP, my_ep);
     pcomma = reshape(pcomma, pnx-2, pny-2);
        

@@ -29,7 +29,7 @@ for i=1:uny
         Ds = gama/deltaY;
         Dn = gama/deltaY;
 
-       [ae, aw, an, as, be, bw, bn, bs, Spom] = hybrid(index, j, i, Fe, Fw, Fn, Fs, ...
+       [ae, aw, an, as, be, bw, bn, bs, Spom] = hybrid(index, obj, obi, Fe, Fw, Fn, Fs, ...
               De, Dw, Dn, Ds, Su, Spom, deltaX, deltaY, um, vrb, bounds.u, unx, uny, 1, ustar); % zatim to asi nefachci pro outlet
         ap = as + an + ae + aw - Spom;
         Source = Su + (pstar(obj, obi) - pstar(obj, obi+1))*deltaY + be + bw + bn + bs +(1-alfa)*(ap/alfa)*uold(obj,obi);

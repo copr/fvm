@@ -5,18 +5,18 @@ function [ ae, aw, an, as, be, bw, bn, bs, Spom ] = hybrid(index, i,j,Fe,Fw,Fn,F
 n = nx*ny;
 
 if abs(Fn/Dn) < 2
-    [an, bn, Spom] = central_differencing(bounds.n_is_d, bounds.n, mod(index, nx) ~= 0, Dn, Fn, Spom, Su, deltaX, koef);
-    [as, bs, Spom] = central_differencing(bounds.s_is_d, bounds.s, mod(index, nx) ~= 1, Ds, -Fs, Spom, Su, deltaX, koef);
+    [an, bn, Spom] = central_differencing(bounds.n_is_d, vals(i+1,j), mod(index, nx) ~= 0, Dn, Fn, Spom, Su, deltaX, koef);
+    [as, bs, Spom] = central_differencing(bounds.s_is_d, vals(i-1,j), mod(index, nx) ~= 1, Ds, -Fs, Spom, Su, deltaX, koef);
 else
-    [as, an, bs, bn, Spom] = upwind_differencing(bounds.s_is_d, bounds.s, mod(index, nx) ~= 1, bounds.n_is_d, bounds.n, mod(index, nx) ~= 0, ...
+    [as, an, bs, bn, Spom] = upwind_differencing(bounds.s_is_d, vals(i-1,j), mod(index, nx) ~= 1, bounds.n_is_d, vals(i-1,j), mod(index, nx) ~= 0, ...
         Ds, Dn, Fs, Fn, Spom, Su, deltaX, v, koef);
 end
 
 if abs(Fe/De) < 2
-    [ae, be, Spom] = central_differencing(bounds.e_is_d, bounds.e, index <= n-nx, De, Fe, Spom, Su, deltaY, koef);
-    [aw, bw, Spom] = central_differencing(bounds.w_is_d, bounds.w, index > nx, Dw, -Fw, Spom, Su, deltaY, koef);
+    [ae, be, Spom] = central_differencing(bounds.e_is_d, vals(i,j+1), index <= n-nx, De, Fe, Spom, Su, deltaY, koef);
+    [aw, bw, Spom] = central_differencing(bounds.w_is_d, vals(i,j-1), index > nx, Dw, -Fw, Spom, Su, deltaY, koef);
 else
-    [aw, ae, bw, be, Spom] = upwind_differencing(bounds.w_is_d, bounds.w, index > nx, bounds.e_is_d, bounds.e, index <= n - nx, ...
+    [aw, ae, bw, be, Spom] = upwind_differencing(bounds.w_is_d, vals(i,j-1), index > nx, bounds.e_is_d, vals(i,j+1), index <= n - nx, ...
         Dw, De, Fw, Fe, Spom, Su, deltaY, u, koef);
 end
 
