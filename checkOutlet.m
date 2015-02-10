@@ -8,13 +8,13 @@ Muout = 0;
 Mvin = 0;
 Mvout = 0;
 if types.ntype == 1
-    Muin = Muin + sum(ustar(1,:));
-    Mvin = Mvin + sum(vstar(1,:));
+    Muin = Muin + sum(ustar(end,:));
+    Mvin = Mvin + sum(vstar(end,:));
 end
 
 if types.stype == 1
-    Muin = Muin + sum(ustar(end,:));
-    Mvin = Mvin + sum(vstar(end,:));
+    Muin = Muin + sum(ustar(1,:));
+    Mvin = Mvin + sum(vstar(1,:));
 end
 
 if types.wtype == 1
@@ -28,28 +28,53 @@ if types.etype == 1
 end
 
 if types.ntype == 2
-    u(1, :) = ustar(2, :);
-    v(1, :) = vstar(2, :);
-    u(1, :) = u(1, :) * Muin/sum(u(1,:));
-    v(1, :) = v(1, :) * Mvin/sum(v(1,:));
-end
-if types.stype == 2
     u(end, :) = ustar(end-1, :);
     v(end, :) = vstar(end-1, :);
-    u(end, :) = u(end, :) * Muin/sum(u(end, :));
-    v(end, :) = v(end, :) * Mvin/sum(v(end, :));
+    Muout = sum(u(end,:));
+    Mvout = sum(v(end,:));
+    if Muout ~= 0
+        u(end, :) = u(end, :) * Muin/Muout;
+    end
+    if Mvout ~= 0
+        v(end, :) = v(end, :) * Mvin/Mvout;
+    end
 end
+if types.stype == 2
+    u(1, :) = ustar(2, :);
+    v(1, :) = vstar(2, :);
+    Muout = sum(u(1,:));
+    Mvout = sum(v(1,:));
+    if Muout ~= 0
+        u(1, :) = u(1, :) * Muin/Muout;
+    end
+    if Mvout ~= 0
+        v(1, :) = v(1, :) * Mvin/Mvout;
+    end
+end
+
 if types.wtype == 2
     u(:, 1) = ustar(:, 2);
     v(:, 1) = vstar(:, 2);
-    u(:, 1) = u(:, 1) * Muin/sum(u(:, 1));
-    v(:, 1) = v(:, 1) * Mvin/sum(v(:, 1));
+    Muout = sum(u(:,1));
+    Mvout = sum(v(:,1));
+    if Muout ~= 0
+        u(:, 1) = u(:, 1) * Muin/Muout;
+    end
+    if Mvout ~= 0
+        v(:, 1) = v(:, 1) * Mvin/Mvout;
+    end
 end
 if types.etype == 2
     u(:, end) = ustar(:, end-1);
     v(:, end) = vstar(:, end-1);
-    u(:, end) = u(:, end) * Muin/sum(u(:, end));
-    v(:, end) = v(:, end) * Mvin/sum(v(:, end));
+    Muout = sum(u(:,end));
+    Mvout = sum(v(:,end));
+    if Muout ~= 0
+        u(:, end) = u(:, end) * Muin/Muout;
+    end
+    if Mvout ~= 0
+        v(:, end) = v(:, end) * Mvin/Mvout;
+    end
 end
 
 end

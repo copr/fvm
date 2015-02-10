@@ -2,6 +2,11 @@ function [ustar, vstar, pstar] = simpleAlgorithm(nx, ny, bounds, Su, Sp, X, Y, g
 deltaX = X/nx;
 deltaY = Y/ny;
 [ustar, vstar, pstar] = initUVPstar(nx, ny, bounds);
+USp = zeros(size(ustar));
+VSp = zeros(size(vstar));
+USu = zeros(size(ustar));
+VSu = zeros(size(vstar));
+[USp, VSp, USu, VSu] = calcSourceTerms(bounds, USp, VSp, USu, VSu, deltaX, deltaY, gama);
 [unx, uny] = size(ustar);
 [vnx, vny] = size(vstar);
 [pnx, pny] = size(pstar);
@@ -11,12 +16,11 @@ sources = ones(pnx,pny);
 alfaU = 0.8; %relaxace rychlosti
 alfaP = 0.3; %relaxace tlaku
 it = 0;
-while it < 1000 && ~convergence(sources(2:end-1,2:end-1), my_ep)
-    [ustar, vstar] = checkOutlet(bounds, ustar, vstar);
-    
-    it = it + 1;
-    [Mu, vectorU] = generateMomentumEqsU(pstar, ustar, vstar, bounds, ro, gama, Su, Sp, deltaX, deltaY, alfaU, uold);
-    [Mv, vectorV] = generateMomentumEqsV(pstar, ustar, vstar, bounds, ro, gama, Su, Sp, deltaX, deltaY, alfaU, vold);
+while it < 100 && ~convergence(sources(2:end-1,2:end-1), my_ep)
+ %   [ustar, vstar] = checkOutlet(bounds, ustar, vstar);
+    it = it + 1
+    [Mu, vectorU] = generateMomentumEqsU(pstar, ustar, vstar, bounds, ro, gama, USu, USp, deltaX, deltaY, alfaU, uold);
+    [Mv, vectorV] = generateMomentumEqsV(pstar, ustar, vstar, bounds, ro, gama, VSu, VSp, deltaX, deltaY, alfaU, vold);
     
     uold = ustar;
     vold = vstar;
@@ -48,11 +52,7 @@ while it < 1000 && ~convergence(sources(2:end-1,2:end-1), my_ep)
     pstar = correctP(pcomma, pstar, alfaP);
     ustar = correctU(pcomma, ustar, deltaY, Mu);
     vstar = correctV(pcomma, vstar, deltaX, Mv);
-    
-   % waitforbuttonpress;
-    
-    %initUVPstar(nx, ny, bounds, zeros(unx,uny), zeros(vnx, vny), pstar)
-    
+   
 end
 it
 ustar = uold;

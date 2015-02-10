@@ -8,7 +8,8 @@ for i=1:uny
     for j=1:unx
         obj = j+1;
         obi = i+1;
-        Spom = Sp;
+        Spom = Sp(obj,obi);
+        Suom = Su(obj,obi);
         index = (i-1)*unx + j;
         
         um = ustar(obj, obi); 
@@ -28,11 +29,12 @@ for i=1:uny
         De = gama/deltaX;
         Ds = gama/deltaY;
         Dn = gama/deltaY;
-
-       [ae, aw, an, as, be, bw, bn, bs, Spom] = hybrid(index, obj, obi, Fe, Fw, Fn, Fs, ...
-              De, Dw, Dn, Ds, Su, Spom, deltaX, deltaY, um, vrb, bounds.u, unx, uny, 1, ustar); % zatim to asi nefachci pro outlet
+        
+        [ae, aw, an, as, be, bw, bn, bs, Spom] = hybrid(index, obj, obi, Fe, Fw, Fn, Fs, ...
+            De, Dw, Dn, Ds, Suom, Spom, deltaX, deltaY, um, vrb, bounds.u, unx, uny, 1, ustar); % zatim to asi nefachci pro outlet
         ap = as + an + ae + aw - Spom;
-        Source = Su + (pstar(obj, obi) - pstar(obj, obi+1))*deltaY + be + bw + bn + bs +(1-alfa)*(ap/alfa)*uold(obj,obi);
+
+        Source = Suom + (pstar(obj, obi) - pstar(obj, obi+1))*deltaY + be + bw + bn + bs +(1-alfa)*(ap/alfa)*uold(obj,obi);
         line = assign(index, ap/alfa, an, as, ae, aw, unx, uny);
         Mu(index,1:end) = line;
         vectorU(index) = Source;

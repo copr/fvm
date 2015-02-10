@@ -6,23 +6,24 @@ if nargin == 3
     pstar = zeros(nx + 2, ny + 2);
 end
 
+if bounds.types.wtype == 2
         ustar(:, 1) = bounds.u.w;
         vstar(:, 1) = bounds.v.w;
         pstar(:, 1) = 0;
-
-
+end
+if bounds.types.etype == 2
         ustar(:, end) = bounds.u.e;
         vstar(:, end) = bounds.v.e;
         pstar(:, end) = 0;
-
-
+end
+if bounds.types.ntype == 2
         ustar(end, :) = bounds.u.n;
         vstar(end, :) = bounds.v.n;
         pstar(end, :) = 0;
-
-
+end
+if bounds.types.stype == 2
         ustar(1, :) = bounds.u.w;
         vstar(1, :) = bounds.v.w;
         pstar(1, :) = 0;
-
+end
 end

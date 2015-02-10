@@ -16,7 +16,7 @@ u.s_is_d = true;
 u.w_is_d = true;
 bounds.u = u;
 
-types.ntype = 1; %inlet
+types.ntype = 2; %moving wall
 types.wtype = 0; %wall
 types.etype = 0; %wall
 types.stype = 0; %outlet
