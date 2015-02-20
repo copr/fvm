@@ -30,15 +30,17 @@ for i=1:uny
         Ds = gama/deltaY;
         Dn = gama/deltaY;
         
-%         if j == unx
-%             Spom
-%         end
+                if j == unx
+            Spom
+        end
 
         [ae, aw, an, as, be, bw, bn, bs, Spom] = hybrid(index, obj, obi, Fe, Fw, Fn, Fs, ...
             De, Dw, Dn, Ds, Suom, Spom, deltaX, deltaY, um, vrb, bounds.u, unx, uny, 1/2, ustar); % zatim to asi nefachci pro outlet
-
         ap = as + an + ae + aw - Spom;
-
+        
+        if j == unx
+            Spom
+        end
         Source = Suom + (pstar(obj, obi) - pstar(obj, obi+1))*deltaY + be + bw + bn + bs + (1-alfa)*(ap/alfa)*uold(obj,obi);
         line = assign(index, ap/alfa, an, as, ae, aw, unx, uny);
         Mu(index,1:end) = line;

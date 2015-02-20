@@ -16,10 +16,11 @@ u.s_is_d = true;
 u.w_is_d = true;
 bounds.u = u;
 
-types.ntype = 2; %moving wall
-types.wtype = 0; %wall
-types.etype = 0; %wall
-types.stype = 0; %outlet
+% 0 - zed, 1 - pohybujici se zed, 2 - inlet, 3 - outlet
+types.ntype = 2; 
+types.wtype = 0; 
+types.etype = 0; 
+types.stype = 0; 
 
 bounds.types = types;
 
@@ -31,7 +32,10 @@ bounds.v = v;
 
 vykreslovaciFce = @(x) surface(x);
 
-[ustar, vstar, pstar] = simpleAlgorithm(n,n,bounds,0,0,0.1,0.1,1,1, 0.00001);
+gama = 0.01;
+ro = 1;
+
+[ustar, vstar, pstar] = simpleAlgorithm(n,n,bounds,0,0,0.1,0.1,gama, ro, 0.000001);
 
 figure('name', 'u');
 vykreslovaciFce(ustar);

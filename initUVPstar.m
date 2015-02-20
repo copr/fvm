@@ -22,8 +22,8 @@ if bounds.types.ntype == 2
         pstar(end, :) = 0;
 end
 if bounds.types.stype == 2
-        ustar(1, :) = bounds.u.w;
-        vstar(1, :) = bounds.v.w;
+        ustar(1, :) = bounds.u.s;
+        vstar(1, :) = bounds.v.s;
         pstar(1, :) = 0;
 end
 end

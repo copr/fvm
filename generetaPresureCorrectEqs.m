@@ -65,7 +65,6 @@ for i=1:pny
         if j-1 < 1
             vb = vstar(obj-1, obi);
             as =  0;
-            % !!!!! prevest do zdroje???
         else
             vb = vstar(obj-1, obi);
             ind = (i-1)*vnx + j -1;

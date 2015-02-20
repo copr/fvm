@@ -8,7 +8,7 @@ for i=1:uny
         obi = i + 1;
         obj = j + 1;
         index = (i-1)*unx + j;
-        ustar(obj,obi) = ustar(obj,obi) + (pcomma(j, i) - pcomma(j , i+1))*deltaY/Mu(index,index);
+        ustar(obj,obi) = ustar(obj,obi) + (pcomma(j, i) - pcomma(j , i+1)) * (deltaY/Mu(index, index));
     end
 end
 end

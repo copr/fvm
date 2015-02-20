@@ -1,7 +1,7 @@
 function [ x, it ] = pcg_chol( A,b, my_eps )
  it=0;
  L = ichol(A); % neuplny choleskeho rozklad A =~ LL^T
- x=ones(size(b)); % pocatecni nasrel
+ x=zeros(size(b)); % pocatecni nasrel
  g_1=A*x-b;
  s_1=L\(L'\g_1);
  p_1=s_1;
