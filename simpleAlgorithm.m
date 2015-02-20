@@ -5,6 +5,7 @@ function [ustar, vstar, pstar] = simpleAlgorithm(nx, ny, bounds, Su, Sp, X, Y, g
 %gama - difuzni koeficinent, ro - hustota, my_ep - pozadovana presnot
 %ustar - napocitane rychlosti ve smeru osy x, vstar - ve smeru y
 %pstar - tlaakove pole
+%ahoj :)
 deltaX = X/nx;
 deltaY = Y/ny;
 [ustar, vstar, pstar] = initUVPstar(nx, ny, bounds);
