@@ -1,5 +1,5 @@
 function [ u,v ] = checkOutlet( bounds, ustar, vstar )
-% jen pro jeden outlet bacha
+% kontorluje jestli je zadana outlet boundary podminka a pouziva ji
 u = ustar;
 v = vstar;
 types = bounds.types;

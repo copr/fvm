@@ -14,10 +14,10 @@ u.e_is_d = true;
 u.n_is_d = true;
 u.s_is_d = true;
 u.w_is_d = true;
-bounds.u = u;
+bounds.u = u; % zadani okrajovych podminek 
 
-% 0 - zed, 1 - pohybujici se zed, 2 - inlet, 3 - outlet
-types.ntype = 2; 
+%type podminek 0 - zed, 1 - pohybujici se zed, 2 - inlet, 3 - outlet
+types.ntype = 1; 
 types.wtype = 0; 
 types.etype = 0; 
 types.stype = 0; 
@@ -35,7 +35,12 @@ vykreslovaciFce = @(x) surface(x);
 gama = 0.01;
 ro = 1;
 
-[ustar, vstar, pstar] = simpleAlgorithm(n,n,bounds,0,0,0.1,0.1,gama, ro, 0.000001);
+my_ep = 0.000001;
+
+Su = 0;
+Sp = 0;
+
+[ustar, vstar, pstar] = simpleAlgorithm(n,n,bounds,Su, Sp,Lx,Ly,gama, ro, my_ep);
 
 figure('name', 'u');
 vykreslovaciFce(ustar);

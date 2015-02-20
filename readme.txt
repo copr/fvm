@@ -1,0 +1,1 @@
+Úloha se spouští spuštením skriptu run.m.
