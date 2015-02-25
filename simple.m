@@ -17,7 +17,7 @@ uold = zeros(unx, uny);
 
 alfaU = 0.8;
 alfaV = alfaU;
-alfaP = 0.4;
+alfaP = 0.1;
 
 SU = zeros(unx, uny);
 SV = zeros(vnx, vny);
