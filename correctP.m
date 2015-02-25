@@ -1,12 +1,11 @@
 function pstar = correctP(pcomma, pstar, alfa)
 [nx, ny] = size(pstar);
-pnx = nx - 2;
-pny = ny - 2;
-for j=1:pnx
-    for i=1:pny
-        obi = i+1;
-        obj = j+1;
-        pstar(obj,obi) = pstar(obj,obi) + alfa*pcomma(j,i);
-    end
-end
+pnx = nx;
+pny = ny;
+pstar = pstar + alfa.*pcomma;
+% for j=2:pnx-1
+%     for i=2:pny-1
+%         pstar(j,i) = pstar(j,i) + alfa*pcomma(j-1,i-1);
+%     end
+% end
 end

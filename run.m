@@ -30,7 +30,7 @@ Ly = 0.1;
 n = 20;
 bounds.v = v;
 
-vykreslovaciFce = @(x) surface(x);
+vykreslovaciFce = @(x) mesh(x);
 
 gama = 0.01;
 ro = 1;
@@ -40,7 +40,7 @@ my_ep = 0.000001;
 Su = 0;
 Sp = 0;
 
-[ustar, vstar, pstar] = simpleAlgorithm(n,n,bounds,Su, Sp,Lx,Ly,gama, ro, my_ep);
+[ustar, vstar, pstar] = simple(n,n,bounds,Su, Sp,Lx,Ly,gama, ro, my_ep);
 
 figure('name', 'u');
 vykreslovaciFce(ustar);
