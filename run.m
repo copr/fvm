@@ -7,7 +7,7 @@ v.n_is_d = true;
 v.s_is_d = true;
 v.w_is_d = true;
 u.e = 0;
-u.n = 1;
+u.n = 0;
 u.s = 0;
 u.w = 0;
 u.e_is_d = true;
@@ -21,6 +21,8 @@ types.ntype = 1;
 types.wtype = 0; 
 types.etype = 0; 
 types.stype = 0; 
+
+bounds.movingWallSpeed = 1;
 
 bounds.types = types;
 

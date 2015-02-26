@@ -24,19 +24,19 @@ for j=1:nx % to by chtelo prepsat at je to bez foru a bez podminky
                     Mout(index, index) = 1;
                     vectorOut(index) = bounds.w;
                 else % jestli je na zapade neumann
-                    ae = max3(-Fe, De - Fe/2, 0); % podle knizky strana 124
-                    aw = max3( Fw, Dw + Fw/2, 0); % kapitola 5.7.2
-                    an = max3( Fs, Ds + Fs/2, 0); % je tohle hybridni diferencovani
-                    as = max3(-Fn, Dn - Fn/2, 0); % chtel jsem to obecneji ale asi to nejde tak lehce
-                    ap = ae + aw + an + as;
-                    
-                    an = 0;
-                    as = 0;
-                    aw = 0;
+%                     ae = max3(-Fe, De - Fe/2, 0); % podle knizky strana 124
+%                     aw = max3( Fw, Dw + Fw/2, 0); % kapitola 5.7.2
+%                     an = max3( Fs, Ds + Fs/2, 0); % je tohle hybridni diferencovani
+%                     as = max3(-Fn, Dn - Fn/2, 0); % chtel jsem to obecneji ale asi to nejde tak lehce
+%                     ap = ae + aw + an + as;
+%                     
+%                     an = 0;
+%                     as = 0;
+%                     aw = 0;
                     
                     line = assign(index, ap, an, as, ae, aw, nx, ny);
                     Mout(index,1:end) = line;
-                    vectorOut(index) = bounds.w;
+                    vectorOut(index) = 0;
                 end
             end
             

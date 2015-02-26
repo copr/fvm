@@ -28,8 +28,13 @@ SVp = zeros(vnx, vny);
 sources = ones(pnx, pny);
 
 it = 0;
-while it < 1000 && ~convergence(sources(2:end-1,2:end-1), my_ep)  
+while it < 1000 && ~convergence(sources(2:end-1,2:end-1), my_ep)
     it = it+1
+    %  [ustar, vstar] = checkOutlet(bounds, ustar, vstar);
+    SU = zeros(unx, uny); SV = zeros(vnx, vny); SUp = zeros(unx, uny); SVp = zeros(vnx, vny);
+    
+    [SUp, SVp, SU, SV] = calcSourceTerms(bounds, SUp, SVp, SU, SV, deltaX, deltaY, gama);
+    
     
     SU = calcPsourcesForU(SU, pstar, unx, uny, deltaX, deltaY);
     SV = calcPsourcesForV(SV, pstar, vnx, vny, deltaX, deltaY);
@@ -47,7 +52,6 @@ while it < 1000 && ~convergence(sources(2:end-1,2:end-1), my_ep)
     
     uold = ustar;
     vold = vstar;
-    
     %spocitaniU
     ustar = Mu\vectorU;
     ustar = reshape(ustar, unx, uny);
@@ -57,7 +61,10 @@ while it < 1000 && ~convergence(sources(2:end-1,2:end-1), my_ep)
 
     [Mp, vectorP, sources] = generetaPresureCorrectEqs(pstar, ustar, vstar, bounds, ro, gama, Su, Sp, deltaX, deltaY, Mu, Mv, sources, alfaU);
     pcomma = pcg_chol(Mp, vectorP, my_ep);
-%     pcomma = Mp\vectorP;
+%     Mp(1, :) = zeros(1, length(Mp(1,:)));
+%     Mp(1,1) = 1;
+%     vectorP(1) = 0; %upevneni tlaku
+%     pcomma = Mp\vectorP; 
     pcomma = reshape(pcomma, pnx, pny);
        
     pstar = correctP(pcomma, pstar, alfaP);
