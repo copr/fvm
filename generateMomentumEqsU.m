@@ -21,14 +21,14 @@ for i=1:uny
         vrt = vstar(obj, obi+1);
         vlt = vstar(obj, obi);
         
-        Fw = (ro*um + ro*ul)/2;
-        Fe = (ro*ur + ro*um)/2;
-        Fs = (ro*vrb + ro*vlb)/2;
-        Fn = (ro*vrt + ro*vlt)/2;
-        Dw = gama/deltaX;
-        De = gama/deltaX;
-        Ds = gama/deltaY;
-        Dn = gama/deltaY;
+        Fw = deltaY*(ro*um + ro*ul)/2;
+        Fe = deltaY*(ro*ur + ro*um)/2;
+        Fs = deltaX*(ro*vrb + ro*vlb)/2;
+        Fn = deltaX*(ro*vrt + ro*vlt)/2;
+        Dw = deltaY*gama/deltaX;
+        De = deltaY*gama/deltaX;
+        Ds = deltaX*gama/deltaY;
+        Dn = deltaX*gama/deltaY;
         
 %         if j == unx
 %             Spom
