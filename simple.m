@@ -1,4 +1,11 @@
 function [ustar, vstar, pstar] = simple(nx, ny, bounds, Su, Sp, Lx, Ly, gama, ro, my_ep)
+%hlavni funkce pro spusteni SIMPLu
+%okrajove podminky jsou zadany pomoci rovnic
+%nx - pocet objemu na ose x, ny - pocet kontrolnich objemu na ose y,
+%bounds - okrajove podminky, Su,Sp - zdroje, Lx,Ly - delka oblasti v x,y
+%gama - difuzni koeficinent, ro - hustota, my_ep - pozadovana presnot
+%ustar - napocitane rychlosti ve smeru osy x, vstar - ve smeru y
+%pstar - tlaakove pole
 deltaX = Lx/nx;
 deltaY = Ly/ny;
 
@@ -15,9 +22,9 @@ vectorV = zeros(vnx*vny, 1);
 vold = zeros(vnx, vny);
 uold = zeros(unx, uny);
 
-alfaU = 0.8;
+alfaU = 0.7;
 alfaV = alfaU;
-alfaP = 0.1;
+alfaP = 0.3;
 
 SU = zeros(unx, uny);
 SV = zeros(vnx, vny);
@@ -70,17 +77,6 @@ while it < 1000 && ~convergence(sources(2:end-1,2:end-1), my_ep)
     pstar = correctP(pcomma, pstar, alfaP);
     ustar = correctU(pcomma, ustar, deltaY, Mu);
     vstar = correctV(pcomma, vstar, deltaX, Mv);
-    
-%         vykreslovaciFce = @(x) mesh(x);
-%     
-%     
-%         figure(1);
-%     vykreslovaciFce(ustar);
-%     figure(2);
-%     vykreslovaciFce(vstar);
-%     figure(3);
-%     vykreslovaciFce(pstar);
-%     waitforbuttonpress;
     
 end
 

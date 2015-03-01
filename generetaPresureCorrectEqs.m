@@ -14,73 +14,73 @@ for i=1:ny
             vectorP(index) = 0;
         else
             
-%             if i == 2
-%                 ul = ustar(j, i-1);
-%                 aw = 0;
-%             else
-%                 ul = ustar(j, i-1);
-%                 ind = (i-2)*unx + j;
-%                 aw = ro*(alfa*(deltaY^2)/Mu(ind, ind));%(index-1, index-1));
-%             end
-%             if i == ny-1
-%                 ur = ustar(j, i);
-%                 ae = 0;
-%             else
-%                 ur = ustar(j, i);
-%                 ind = (i-1)*unx + j;
-%                 
-%                 ae = ro*(alfa*(deltaY^2)/Mu(ind,ind));%(index,index));
-%             end
-%             if j == nx-1
-%                 vt = vstar(j,i);
-%                 an = 0;
-%             else
-%                 vt = vstar(j, i);
-%                 ind = (i-1)*vnx + j;
-%                 an = ro*(alfa*(deltaX^2)/Mv(ind, ind));%(index-(i-1), index-(i-1)));
-%             end
-%             if j == 2
-%                 vb = vstar(j-1, i);
-%                 as =  0;
-%             else
-%                 vb = vstar(j-1, i);
-%                 ind = (i-1)*vnx + j -1;
-%                 as = ro*(alfa*(deltaX^2)/Mv(ind,ind));%(index-1-(i-1), index-1-(i-1)));
-%             end
-            
-% %             
-            ul = ustar(j, i-1);
-            ind = (i-2)*unx + j;
-            if Mu(ind, ind) == 1
+            if i == 2
+                ul = ustar(j, i-1);
                 aw = 0;
             else
+                ul = ustar(j, i-1);
+                ind = (i-2)*unx + j;
                 aw = ro*(alfa*(deltaY^2)/Mu(ind, ind));%(index-1, index-1));
             end
-                        
-            ur = ustar(j, i);
-            ind = (i-1)*unx + j;
-            if Mu(ind, ind) == 1
+            if i == ny-1
+                ur = ustar(j, i);
                 ae = 0;
             else
+                ur = ustar(j, i);
+                ind = (i-1)*unx + j;
+                
                 ae = ro*(alfa*(deltaY^2)/Mu(ind,ind));%(index,index));
             end
-                        
-            vt = vstar(j, i);
-            ind = (i-1)*vnx + j;
-            if Mv(ind, ind) == 1
+            if j == nx-1
+                vt = vstar(j,i);
                 an = 0;
             else
+                vt = vstar(j, i);
+                ind = (i-1)*vnx + j;
                 an = ro*(alfa*(deltaX^2)/Mv(ind, ind));%(index-(i-1), index-(i-1)));
             end
-                        
-            vb = vstar(j-1, i);
-            ind = (i-1)*vnx + j -1;
-            if Mv(ind, ind) == 1
-                as = 0;
+            if j == 2
+                vb = vstar(j-1, i);
+                as =  0;
             else
+                vb = vstar(j-1, i);
+                ind = (i-1)*vnx + j -1;
                 as = ro*(alfa*(deltaX^2)/Mv(ind,ind));%(index-1-(i-1), index-1-(i-1)));
             end
- 
+            
+% %             
+%             ul = ustar(j, i-1);
+%             ind = (i-2)*unx + j;
+%             if Mu(ind, ind) == 1
+%                 aw = 0;
+%             else
+%                 aw = ro*(alfa*(deltaY^2)/Mu(ind, ind));%(index-1, index-1));
+%             end
+%                         
+%             ur = ustar(j, i);
+%             ind = (i-1)*unx + j;
+%             if Mu(ind, ind) == 1
+%                 ae = 0;
+%             else
+%                 ae = ro*(alfa*(deltaY^2)/Mu(ind,ind));%(index,index));
+%             end
+%                         
+%             vt = vstar(j, i);
+%             ind = (i-1)*vnx + j;
+%             if Mv(ind, ind) == 1
+%                 an = 0;
+%             else
+%                 an = ro*(alfa*(deltaX^2)/Mv(ind, ind));%(index-(i-1), index-(i-1)));
+%             end
+%                         
+%             vb = vstar(j-1, i);
+%             ind = (i-1)*vnx + j -1;
+%             if Mv(ind, ind) == 1
+%                 as = 0;
+%             else
+%                 as = ro*(alfa*(deltaX^2)/Mv(ind,ind));%(index-1-(i-1), index-1-(i-1)));
+%             end
+%  
 
             Source = ro*ul*deltaY - ro*ur*deltaY + ro*vb*deltaX - ro*vt*deltaX;
             sources(j, i) = Source;

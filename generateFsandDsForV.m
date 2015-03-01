@@ -1,4 +1,5 @@
 function [allF, allD] = generateFsandDsForV(u, v, ro, gama, deltaX, deltaY)
+%vygeneruje vsechny koeficienty F a D pro V-rovnice.
 [unx, uny] = size(u);
 [vnx, vny] = size(v);
 n = vnx*vny;
@@ -57,14 +58,14 @@ for j=1:vnx
             urt = u(j+1, i);
         end
         
-        Fw = (ro*ult + ro*ulb)/2;
-        Fe = (ro*urt + ro*urb)/2;
-        Fs = (ro*vb + ro*vm)/2;
-        Fn = (ro*vm + ro*vt)/2;
-        Dw = gama/deltaX;
-        De = gama/deltaX;
-        Ds = gama/deltaY;
-        Dn = gama/deltaY;
+        Fw = deltaY*(ro*ult + ro*ulb)/2;
+        Fe = deltaY*(ro*urt + ro*urb)/2;
+        Fs = deltaX*(ro*vb + ro*vm)/2;
+        Fn = deltaX*(ro*vm + ro*vt)/2;
+        Dw = deltaY*gama/deltaX;
+        De = deltaY*gama/deltaX;
+        Ds = deltaX*gama/deltaY;
+        Dn = deltaX*gama/deltaY;
         
         allF(index, 1) = Fe; allF(index, 2) = Fw;
         allF(index, 3) = Fn; allF(index, 4) = Fs;

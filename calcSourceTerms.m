@@ -30,14 +30,13 @@ if types.ntype == 1
     USuout(end-1, :) = 2*mu*bounds.movingWallSpeed*deltaX/deltaY;
 end
 if types.stype == 1
-    USpout(2, :) =-2*mu*deltaY/deltaY;
-    USuout(2, :) = 2*mu*bounds.movingWallSpeed*deltaY/deltaY;
+    USpout(2, :) =-2*mu*deltaX/deltaY;
+    USuout(2, :) = 2*mu*bounds.movingWallSpeed*deltaX/deltaY;
 end
 
-
 if types.wtype == 1
-    VSpout(:, 2) =-2*mu*deltaX/deltaX;
-    VSuout(:, 2) = 2*mu*bounds.movingWallSpeed*deltaX/deltaX;
+    VSpout(:, 2) =-2*mu*deltaY/deltaX;
+    VSuout(:, 2) = 2*mu*bounds.movingWallSpeed*deltaY/deltaX;
 end
 if types.etype == 1
     VSpout(:, end-1) =-2*mu*deltaY/deltaX;
