@@ -50,11 +50,11 @@ while it < 1000 && ~convergence(sources(2:end-1,2:end-1), my_ep)
     [FsForV, DsForV] = generateFsandDsForV(ustar, vstar, ro, gama, deltaX, deltaY);
     
     [Mu, vectorU] = generateNonBoundaryEquations(SU, SUp, FsForU, DsForU, Mu, vectorU, unx, uny);
-    [Mu, vectorU] = relaxace(Mu, vectorU, alfaU, unx, uny, uold);
+    [Mu, vectorU] = relax(Mu, vectorU, alfaU, unx, uny, uold);
     [Mu, vectorU] = generateBoundaryEquations(bounds.u, Mu, vectorU, unx, uny, FsForU, DsForU);
     
     [Mv, vectorV] = generateNonBoundaryEquations(SV, SVp, FsForV, DsForV, Mv, vectorV, vnx, vny);
-    [Mv, vectorV] = relaxace(Mv, vectorV, alfaV, vnx, vny, vold);
+    [Mv, vectorV] = relax(Mv, vectorV, alfaV, vnx, vny, vold);
     [Mv, vectorV] = generateBoundaryEquations(bounds.v, Mv, vectorV, vnx, vny, FsForV, DsForV);
     
     uold = ustar;
