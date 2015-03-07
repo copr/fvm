@@ -26,18 +26,12 @@ alfaU = 0.7;
 alfaV = alfaU;
 alfaP = 0.3;
 
-SU = zeros(unx, uny);
-SV = zeros(vnx, vny);
-
-SUp = zeros(unx, uny);
-SVp = zeros(vnx, vny);
-
 sources = ones(pnx, pny);
 
 it = 0;
-while it < 1000 && ~convergence(sources(2:end-1,2:end-1), my_ep)
+while it < 300 && ~convergence(sources(2:end-1,2:end-1), my_ep)
     it = it+1
-    %  [ustar, vstar] = checkOutlet(bounds, ustar, vstar);
+    [ustar, vstar] = checkOutlet(bounds, ustar, vstar);
     SU = zeros(unx, uny); SV = zeros(vnx, vny); SUp = zeros(unx, uny); SVp = zeros(vnx, vny);
     
     [SUp, SVp, SU, SV] = calcSourceTerms(bounds, SUp, SVp, SU, SV, deltaX, deltaY, gama);
@@ -51,19 +45,19 @@ while it < 1000 && ~convergence(sources(2:end-1,2:end-1), my_ep)
     
     [Mu, vectorU] = generateNonBoundaryEquations(SU, SUp, FsForU, DsForU, Mu, vectorU, unx, uny);
     [Mu, vectorU] = relax(Mu, vectorU, alfaU, unx, uny, uold);
-    [Mu, vectorU] = generateBoundaryEquations(bounds.u, Mu, vectorU, unx, uny, FsForU, DsForU);
+    [Mu, vectorU] = generateBoundaryEquations(bounds.u, Mu, vectorU, unx, uny, FsForU, DsForU, ustar);
     
     [Mv, vectorV] = generateNonBoundaryEquations(SV, SVp, FsForV, DsForV, Mv, vectorV, vnx, vny);
     [Mv, vectorV] = relax(Mv, vectorV, alfaV, vnx, vny, vold);
-    [Mv, vectorV] = generateBoundaryEquations(bounds.v, Mv, vectorV, vnx, vny, FsForV, DsForV);
-    
+    [Mv, vectorV] = generateBoundaryEquations(bounds.v, Mv, vectorV, vnx, vny, FsForV, DsForV, vstar);
+
     uold = ustar;
     vold = vstar;
     %spocitaniU
-    ustar = Mu\vectorU;
+    ustar = pcg_chol(Mu, vectorU, my_ep);
     ustar = reshape(ustar, unx, uny);
     %spocitaniV
-    vstar = Mv\vectorV;
+    vstar = pcg_chol(Mv, vectorV, my_ep);
     vstar = reshape(vstar, vnx, vny);
 
     [Mp, vectorP, sources] = generetaPresureCorrectEqs(pstar, ustar, vstar, bounds, ro, gama, Su, Sp, deltaX, deltaY, Mu, Mv, sources, alfaU);
@@ -77,6 +71,7 @@ while it < 1000 && ~convergence(sources(2:end-1,2:end-1), my_ep)
     pstar = correctP(pcomma, pstar, alfaP);
     ustar = correctU(pcomma, ustar, deltaY, Mu);
     vstar = correctV(pcomma, vstar, deltaX, Mv);
+%     
     
 end
 
