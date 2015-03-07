@@ -1,4 +1,4 @@
-function [USpout, VSpout, USuout, VSuout] = calcSourceTerms(bounds, USp, VSp, USu, VSu, deltaX, deltaY, mu)
+function [USpout, VSpout, USuout, VSuout] = calcSourceTermsArisingFromWalls(bounds, USp, VSp, USu, VSu, deltaX, deltaY, mu)
 %spocita zdroje pro pripad ze jsou na krajich zadane zdi
 USpout = zeros(size(USp));
 VSpout = zeros(size(VSp));
