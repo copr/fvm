@@ -1,0 +1,79 @@
+function [Mp, vectorP, sources] = generetaPresureCorrectEqs(pstar, ustar, vstar, bounds, ro, gama, Su, Sp, deltaX, deltaY, Mu, Mv, sources, alfa)
+%generuje rovnice pro tlakove korecke
+[unx, uny] = size(ustar);
+[vnx, vny] = size(vstar);
+[nx, ny] = size(pstar);
+pnx = nx-2;
+pny = ny-2;
+n = nx*ny;
+[Mp, vectorP] = createMandVector(nx, ny);
+for i=1:pny
+    for j=1:pnx
+        Spom = Sp;
+        index = (i-1)*pnx + j;
+        
+        obj = j+1;
+        obi = i+1;
+        
+%         
+%                 ul = ustar(j, i-1);
+%                 ind = (i-2)*unx + j;
+%                 aw = ro*(alfa*(deltaY^2)/Mu(ind, ind));%(index-1, index-1));
+%         
+%                 ur = ustar(j, i);
+%                 ind = (i-1)*unx + j;
+%                 ae = ro*(alfa*(deltaY^2)/Mu(ind,ind));%(index,index));
+%         
+%                 vt = vstar(j, i);
+%                 ind = (i-1)*vnx + j;
+%                 an = ro*(alfa*(deltaX^2)/Mv(ind, ind));%(index-(i-1), index-(i-1)));
+%         
+%                 vb = vstar(j-1, i);
+%                 ind = (i-1)*vnx + j -1;
+%                 as = ro*(alfa*(deltaX^2)/Mv(ind,ind));%(index-1-(i-1), index-1-(i-1)));
+        
+                %
+        if obi-1 < 1
+            ul = 0;
+            aw = 0;
+        else
+            ul = ustar(j, i-1);
+            ind = (i-2)*unx + j;
+            aw = ro*(alfa*(deltaY^2)/Mu(ind, ind));%(index-1, index-1));
+        end
+        if i > uny
+            ur = 0;
+            ae = 0;
+        else
+            ur = ustar(j, i);
+            ind = (i-1)*unx + j;
+            ae = ro*(alfa*(deltaY^2)/Mu(ind,ind));%(index,index));
+        end
+        if j > vnx
+            vt = 0;
+            an = 0;
+        else
+            vt = vstar(j, i);
+            ind = (i-1)*vnx + j;
+            an = ro*(alfa*(deltaX^2)/Mv(ind, ind));%(index-(i-1), index-(i-1)));
+        end
+        if j-1 < 1
+            vb = 0;
+            as =  0;
+            % !!!!! prevest do zdroje???
+        else
+            vb = vstar(j-1, i);
+            ind = (i-1)*vnx + j -1;
+            as = ro*(alfa*(deltaX^2)/Mv(ind,ind));%(index-1-(i-1), index-1-(i-1)));
+       end
+        
+        Source = ro*ul*deltaY - ro*ur*deltaY + ro*vb*deltaX - ro*vt*deltaX;
+        sources(j, i) = Source;
+        ap = as + an + ae + aw;
+        line = assign(index, ap, an, as, ae, aw, nx, ny);
+        Mp(index,1:end) = line;
+        vectorP(index) = Source;
+    end
+end
+
+end

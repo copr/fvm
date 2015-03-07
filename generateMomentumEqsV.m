@@ -22,14 +22,14 @@ for i=1:vny
         urt = ustar(obj+1, obi);
         
         
-        Fw = deltaY*(ro*ult + ro*ulb)/2;
-        Fe = deltaY*(ro*urt + ro*urb)/2;
-        Fs = deltaX*(ro*vb + ro*vm)/2;
-        Fn = deltaX*(ro*vm + ro*vt)/2;
-        Dw = deltaY*gama/deltaX;
-        De = deltaY*gama/deltaX;
-        Ds = deltaX*gama/deltaY;
-        Dn = deltaX*gama/deltaY;
+        Fw = (ro*ult + ro*ulb)/2;
+        Fe = (ro*urt + ro*urb)/2;
+        Fs = (ro*vb + ro*vm)/2;
+        Fn = (ro*vm + ro*vt)/2;
+        Dw = gama/deltaX;
+        De = gama/deltaX;
+        Ds = gama/deltaY;
+        Dn = gama/deltaY;
 
         [ae, aw, an, as, be, bw, bn, bs, Spom] = hybrid(index, obj, obi, Fe, Fw, Fn, Fs, ...
             De, Dw, Dn, Ds, Suom, Spom, deltaX, deltaY, urb, vm, bounds.v, vnx, vny, 1/2, vstar);% zatim to asi nefachci pro outlet

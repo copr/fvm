@@ -30,7 +30,7 @@ Ly = 0.1;
 n = 20;
 bounds.v = v;
 
-vykreslovaciFce = @(x) mesh(x);
+vykreslovaciFce = @(x) surface(x);
 
 gama = 0.01;
 ro = 1;
