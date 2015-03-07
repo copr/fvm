@@ -17,7 +17,7 @@ u.w_is_d = true;
 bounds.u = u;
 
 % 0 - zed, 1 - pohybujici se zed, 2 - inlet, 3 - outlet
-types.ntype = 2; 
+types.ntype = 1; 
 types.wtype = 0; 
 types.etype = 0; 
 types.stype = 0; 
