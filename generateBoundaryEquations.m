@@ -1,4 +1,4 @@
-function [Mout, vectorOut] = generateBoundaryEquations(bounds, Min, vectorIn, nx, ny, allF, allD, vals)
+function [Mout, vectorOut, indexToWriteTo] = generateBoundaryEquations(bounds, Min, vectorIn, nx, ny, allF, allD, vals, indexToWriteTo)
 % Vygeneruje Matici a vektor pravych stran pro kontrolni objemy  ktere
 % JSOU na okrajich
 
@@ -34,70 +34,50 @@ for j=1:nx
             
             if i == 1 % zapadni kraj
                 if bounds.w_is_d % jestli je dirichlet na zapade
-                    Mout(index, index) = 1;
-                    vectorOut(index) = vals(j, i);
+                    line = assign(index, 1, 0, 0, 0, 0, nx, ny);
+                    S = vals(j, i);
                 else % jestli je na zapade neumann
-%                     
-%                     an = 0;
-%                     as = 0;
-                     aw = 0;
-                    
+                    aw = 0;
                     line = assign(index, ap, an, as, ae, aw, nx, ny);
-                    Mout(index,1:end) = line;
-                    vectorOut(index) = bounds.w;
+                    S = bounds.w;
                 end
             end
             
             if i == ny % vychodni kraj
                 if bounds.e_is_d % jestli je dirichlet na vychode
-                    Mout(index, index) = 1;
-                    vectorOut(index) = vals(j, i);
+                    line = assign(index, 1, 0, 0, 0, 0, nx, ny);
+                    S = vals(j, i);
                 else % jestli je na vychode neumann
-                    
-%                     an = 0;
-%                     as = 0;
-                     ae = 0;
-%                     
+                    as = 0;
+                    ae = 0;
                     line = assign(index, ap, an, as, ae, aw, nx, ny);
-                    Mout(index,1:end) = line;
-                    vectorOut(index) = bounds.e;
+                    S = bounds.e;
                 end
             end
             
             if j == 1 % jizni kraj
                 if bounds.s_is_d % jestli je dirichlet na jihu
-                    Mout(index, index) = 1;
-                    vectorOut(index) = vals(j, i);
+                    line = assign(index, 1, 0, 0, 0, 0, nx, ny);
+                    S = vals(j, i);
                 else % jestli je na jihode neumann
-                    
-%                     ae = 0;
-                     as = 0;
-%                     aw = 0;
-                    
+                    as = 0;
                     line = assign(index, ap, an, as, ae, aw, nx, ny);
-                    Mout(index,1:end) = line;
-                    vectorOut(index) = bounds.s;
+                    S = bounds.s;
                 end
             end
             
-            if j == nx % zapadni kraj
+            if j == nx % severni kraj
                 if bounds.n_is_d % jestli je dirichlet na severu
-                    Mout(index, index) = 1;
-                    vectorOut(index) = vals(j, i);
+                    line = assign(index, 1, 0, 0, 0, 0, nx, ny);
+                    S = vals(j, i);
                 else % jestli je na severu neumann
-
-                    
-%                     an = 0;
-%                     ae = 0;
-                     aw = 0;
-                    
+                    aw = 0;                
                     line = assign(index, ap, an, as, ae, aw, nx, ny);
-                    Mout(index,1:end) = line;
-                    vectorOut(index) = bounds.n;
+                    S = bounds.s;
                 end
             end
-            
-
+            Mout(index,1:end) = line;
+            vectorOut(index) = S;
         end
     end
 end
