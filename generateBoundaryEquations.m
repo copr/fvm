@@ -49,7 +49,6 @@ for j=1:nx
                     S = vals(j, i);
                 else % jestli je na vychode neumann
                     as = 0;
-                    ae = 0;
                     line = assign(index, ap, an, as, ae, aw, nx, ny);
                     S = bounds.e;
                 end
