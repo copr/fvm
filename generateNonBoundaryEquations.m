@@ -23,20 +23,21 @@ for j=startJ:endJ
         as = max3(-Fn, Dn - Fn/2, 0); 
 
         ap = ae + aw + an + as - Sp(j,i);
-        
+        vectorOut(index) = Su(j, i);
         if isLeft && i == endI
-            ae = 0;
-            an = 0;
-            as = 0;
+            ae = 1;
         end
         
         if ~isLeft && i == startI
-            aw = 0;
+            aw = 1;
+%             an = 0;
+%             as = 0;
+%             vectorOut(index) = 0;
         end
         
         line = assign(index, ap, an, as, ae, aw, nx, ny);
         Mout(index,1:end) = line;
-        vectorOut(index) = Su(j, i);
+       
     end
 end
 

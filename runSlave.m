@@ -8,7 +8,7 @@ v.s_is_d = true;
 v.w_is_d = true;
 
 
-n = 4;
+n = 40;
 
 Su = ones(n, n+2);
 Sp = zeros(n, n+2);

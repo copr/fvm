@@ -4,7 +4,7 @@ function [] = fvm(u, v, ro, gama, Lx, Ly, NX, NY, bounds, Su, Sp)
 deltaX = Lx/NX;
 deltaY = Ly/NY;
 nx = NX;
-ny = NY+2;
+ny = NY+1;
 n = nx*ny;
 M = sparse(n, n);
 vector = zeros(n, 1);
@@ -37,13 +37,13 @@ M = Mleft + Mright;
 
 
 sol = M\vector;
-
-if NX == 4
-    M
-    sol
-    vector
-end
 %sol = pcg_chol(M, vector, 0.0000001);
+if NX == 4
+    full(M)
+    vector
+    sol
+end
+
 
 solMatrix = reshape(sol, nx, ny);
 
