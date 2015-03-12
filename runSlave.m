@@ -5,7 +5,7 @@ v.w = 0;
 v.e_is_d = true;
 v.n_is_d = true;
 v.s_is_d = true;
-v.w_is_d = false;
+v.w_is_d = true;
 
 
 n = 50;
