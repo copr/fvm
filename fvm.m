@@ -1,34 +1,52 @@
-function [] = fvm(u, v, ro, gama, Lx, Ly, nx, ny, bounds, Su, Sp)
+function [] = fvm(u, v, ro, gama, Lx, Ly, NX, NY, bounds, Su, Sp)
 %UNTITLED10 Summary of this function goes here
 %   Detailed explanation goes here
-deltaX = Lx/nx;
-deltaY = Ly/ny;
+deltaX = Lx/NX;
+deltaY = Ly/NY;
+nx = NX;
+ny = NY+2;
 n = nx*ny;
-M = zeros(n, n);
+M = sparse(n, n);
 vector = zeros(n, 1);
 
+sol = zeros(n,n);
+sol(1,:) = bounds.s;
+sol(:,1) = bounds.w;
+sol(end, :) = bounds.n;
+sol(:, end) = bounds.e;
+
+ Mleft = sparse(n, n); vectorL = zeros(n, 1);
+ Mright = sparse(n, n); vectorR = zeros(n, 1);
 
 [allF,allD] = generateFsandDs(n, u, v, ro, gama, deltaX, deltaY);
-% [M, vector] = generateNonBoundaryEquations(Su, Sp, allF, allD, M, vector, nx, ny);
-% [M, vector] = generateBoundaryEquations(bounds, M, vector, nx, ny, allF, allD);
 
-for j=1:nx
-    for i=1:ny
-        index = (i-1)*nx + j;
-        if isOnBoundary(j, i, nx, ny)
-            [equation, rhs] = generateBoundaryEquation(i, j, bounds, nx, ny, allF, allD);
-        else
-            [equation, rhs] = generateNonBoundaryEquation(i, j, deltaX*deltaY*Su, deltaX*deltaY*Sp, allF, allD, nx, ny);
-        end
-        M(index, :) = equation;
-        vector(index) = rhs;
-    end
-end
+
+[Mleft, vector] = generateNonBoundaryEquations(Su.*(deltaX*deltaY), Sp.*(deltaX*deltaY), allF, allD, Mleft, vector, NX, nx, ny ...
+    , 2, floor(ny/2), 2, nx-1, true);
+
+[Mright, vector] = generateNonBoundaryEquations(Su.*(deltaX*deltaY), Sp.*(deltaX*deltaY), allF, allD, Mright, vector, NX, nx, ny ...
+    , floor(ny/2)+2, ny-1, 2, nx-1, false);
+% Mleft
+% size(Mleft)
+% Mright
+M = Mleft + Mright;
+
+[M, vector] = generateBoundaryEquations(bounds, M, vector, nx, ny, allF, allD, sol);
+[M, vector] = generateGlueEquations(M, vector, floor(ny/2)+1, nx, ny);
+
 
 
 sol = M\vector;
 
+if NX == 4
+    M
+    sol
+    vector
+end
+%sol = pcg_chol(M, vector, 0.0000001);
+
 solMatrix = reshape(sol, nx, ny);
+
 
 mesh(solMatrix);
 

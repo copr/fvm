@@ -1,6 +1,8 @@
-function [Mout, vectorOut, indexToWriteTo] = generateBoundaryEquations(bounds, Min, vectorIn, nx, ny, allF, allD, vals, indexToWriteTo)
+function [Mout, vectorOut] = generateBoundaryEquations(bounds, Min, vectorIn, nx, ny, allF, allD, vals)
 % Vygeneruje Matici a vektor pravych stran pro kontrolni objemy  ktere
 % JSOU na okrajich
+
+%Von Neumanny vytahnout do vedlejsi funkce
 
 Mout = Min;
 vectorOut = vectorIn;

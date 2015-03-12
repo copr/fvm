@@ -1,13 +1,15 @@
-function [Mout, vectorOut] = generateNonBoundaryEquations(Su, Sp, allF, allD, Min, vectorIn, nx, ny, deltaX, deltaY)
+function [Mout, vectorOut] = generateNonBoundaryEquations(Su, Sp, allF, allD, Min, vectorIn, NX, nx, ny ...
+    , startI, endI, startJ, endJ, isLeft)
 % Vygeneruje Matici a vektor pravych stran pro kontrolni objemy  ktere
 % NEjsou na okrajich
 
 Mout = Min;
 vectorOut = vectorIn;
 
-for j=2:nx-1
-    for i=2:ny-1
-        index = (i-1)*nx + j; 
+for j=startJ:endJ
+    for i=startI:endI
+
+        index = (i-1)*NX + j;
         
         Fe = allF(index, 1); Fw = allF(index, 2);
         Fn = allF(index, 3); Fs = allF(index, 4);
@@ -19,11 +21,22 @@ for j=2:nx-1
         aw = max3( Fw, Dw + Fw/2, 0); % kapitola 5.7.2
         an = max3( Fs, Ds + Fs/2, 0); % je tohle hybridni diferencovani
         as = max3(-Fn, Dn - Fn/2, 0); 
+
         ap = ae + aw + an + as - Sp(j,i);
+        
+        if isLeft && i == endI
+            ae = 0;
+            an = 0;
+            as = 0;
+        end
+        
+        if ~isLeft && i == startI
+            aw = 0;
+        end
         
         line = assign(index, ap, an, as, ae, aw, nx, ny);
         Mout(index,1:end) = line;
-        vectorOut(index) = Su(j,i);
+        vectorOut(index) = Su(j, i);
     end
 end
 
