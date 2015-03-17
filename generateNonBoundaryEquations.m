@@ -1,5 +1,5 @@
 function [Mout, vectorOut] = generateNonBoundaryEquations(Su, Sp, allF, allD, Min, vectorIn, NX, nx, ny ...
-    , startI, endI, startJ, endJ, isLeft)
+    , startI, endI, startJ, endJ)
 % Vygeneruje Matici a vektor pravych stran pro kontrolni objemy  ktere
 % NEjsou na okrajich
 
@@ -24,16 +24,6 @@ for j=startJ:endJ
 
         ap = ae + aw + an + as - Sp(j,i);
         vectorOut(index) = Su(j, i);
-        if isLeft && i == endI
-            ae = 1;
-        end
-        
-        if ~isLeft && i == startI
-            aw = 1;
-%             an = 0;
-%             as = 0;
-%             vectorOut(index) = 0;
-        end
         
         line = assign(index, ap, an, as, ae, aw, nx, ny);
         Mout(index,1:end) = line;
