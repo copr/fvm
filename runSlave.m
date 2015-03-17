@@ -1,14 +1,14 @@
-v.e = 10;
+v.e = 0;
 v.n = 0;
 v.s = 0;
 v.w = 0;
 v.e_is_d = true;
 v.n_is_d = false;
 v.s_is_d = false;
-v.w_is_d = true;
+v.w_is_d = false;
 
 
-n = 40;
+n = 11;
 
 Su = ones(n, n+2);
 Sp = zeros(n, n+2);
