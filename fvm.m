@@ -29,10 +29,10 @@ sol2(:, end) = bounds.e;
 
 
 [Mleft, vector] = generateNonBoundaryEquations(Su.*(deltaX*deltaY), Sp.*(deltaX*deltaY), allF, allD, Mleft, vector, NX, nx, ny ...
-    , 2, floor(ny/2), 2, nx-1, true);
+    , 2, floor(ny/2), 2, nx-1);
 
 [Mright, vector] = generateNonBoundaryEquations(Su.*(deltaX*deltaY), Sp.*(deltaX*deltaY), allF, allD, Mright, vector, NX, nx, ny ...
-    , floor(ny/2)+3, ny-1, 2, nx-1, false);
+    , floor(ny/2)+3, ny-1, 2, nx-1);
 
 [MT, vectorT] = generateNonBoundaryEquations(Su.*(deltaX*deltaY), Sp.*(deltaX*deltaY), allF, allD, MT, vectorT, NX, NX, NY...
     , 2, NY-1, 2, NX-1, false); 
