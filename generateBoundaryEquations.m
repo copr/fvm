@@ -3,9 +3,9 @@ function [Mout, vectorOut] = generateBoundaryEquations(bounds, Min, vectorIn, nx
 % JSOU na okrajich
 
 %Von Neumanny vytahnout do vedlejsi funkce
-
 Mout = Min;
 vectorOut = vectorIn;
+
 
 for j=1:nx
     for i=1:ny
@@ -23,10 +23,46 @@ for j=1:nx
         as = max3(-Fn, Dn - Fn/2, 0); % chtel jsem to obecneji ale asi to nejde tak lehce
         ap = ae + aw + an + as;
         
-        if (i == 1 && j == 1 || i == 1 && j == nx || ...
-                i == ny && j == 1 || i == ny && j == nx) %hnus
-            Mout(index, index) = 1; %rohy
-            vectorOut(index) = 0;
+%         if (i == 1 && j == 1 || i == 1 && j == nx || ...
+%                 i == ny && j == 1 || i == ny && j == nx) %hnus
+%             Mout(index, index) = 1; %rohy
+%             vectorOut(index) = 0;
+%             continue;
+%         end
+        
+        if (i == 1 && j == 1)
+            ap = an + ae;
+            line = assign(index, ap, an, 0, ae, 0, nx, ny);
+            S = 0;
+            Mout(index,1:end) = line;
+            vectorOut(index) = S;
+            continue;
+        end
+        
+        if (i == 1 && j == nx)
+            ap = as + ae;
+            line = assign(index, ap, 0, as, ae, 0, nx, ny);
+            S = 0;
+            Mout(index,1:end) = line;
+            vectorOut(index) = S;
+            continue;
+        end
+        
+        if (i == ny && j == 1 )
+            ap = an + aw;
+            line = assign(index, ap, an, aw, 0, 0, nx, ny);
+            S = 0;
+            Mout(index,1:end) = line;
+            vectorOut(index) = S;
+            continue;
+        end
+        
+        if (i == ny && j == nx)
+            ap = as + aw;
+            line = assign(index, ap, 0, as, 0, aw, nx, ny);
+            S = 0;
+            Mout(index,1:end) = line;
+            vectorOut(index) = S;
             continue;
         end
         
@@ -39,8 +75,8 @@ for j=1:nx
                     line = assign(index, 1, 0, 0, 0, 0, nx, ny);
                     S = vals(j, i);
                 else % jestli je na zapade neumann
-                    aw = 0;
-                    line = assign(index, ap, an, as, ae, aw, nx, ny);
+                    ap = ae + an + as;
+                    line = assign(index, ap, an, as, ae, 0, nx, ny);
                     S = bounds.w;
                 end
             end
@@ -50,8 +86,8 @@ for j=1:nx
                     line = assign(index, 1, 0, 0, 0, 0, nx, ny);
                     S = vals(j, i);
                 else % jestli je na vychode neumann
-                    as = 0;
-                    line = assign(index, ap, an, as, ae, aw, nx, ny);
+                    ap = aw + an + as;
+                    line = assign(index, ap, an, as, 0, aw, nx, ny);
                     S = bounds.e;
                 end
             end
@@ -61,8 +97,8 @@ for j=1:nx
                     line = assign(index, 1, 0, 0, 0, 0, nx, ny);
                     S = vals(j, i);
                 else % jestli je na jihode neumann
-                    as = 0;
-                    line = assign(index, ap, an, as, ae, aw, nx, ny);
+                    ap = aw + an + ae;
+                    line = assign(index, ap, an, 0, ae, aw, nx, ny);
                     S = bounds.s;
                 end
             end
@@ -72,9 +108,9 @@ for j=1:nx
                     line = assign(index, 1, 0, 0, 0, 0, nx, ny);
                     S = vals(j, i);
                 else % jestli je na severu neumann
-                    aw = 0;                
-                    line = assign(index, ap, an, as, ae, aw, nx, ny);
-                    S = bounds.s;
+                    ap = aw + ae + as;               
+                    line = assign(index, ap, 0, as, ae, aw, nx, ny);
+                    S = bounds.n;
                 end
             end
             Mout(index,1:end) = line;
