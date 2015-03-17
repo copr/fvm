@@ -4,7 +4,7 @@ function [] = fvm(u, v, ro, gama, Lx, Ly, NX, NY, bounds, Su, Sp)
 deltaX = Lx/NX;
 deltaY = Ly/NY;
 nx = NX;
-ny = NY+1;
+ny = NY+2;
 n = nx*ny;
 vector = zeros(n, 1);
 
@@ -32,7 +32,7 @@ sol2(:, end) = bounds.e;
     , 2, floor(ny/2), 2, nx-1, true);
 
 [Mright, vector] = generateNonBoundaryEquations(Su.*(deltaX*deltaY), Sp.*(deltaX*deltaY), allF, allD, Mright, vector, NX, nx, ny ...
-    , floor(ny/2)+2, ny-1, 2, nx-1, false);
+    , floor(ny/2)+3, ny-1, 2, nx-1, false);
 
 [MT, vectorT] = generateNonBoundaryEquations(Su.*(deltaX*deltaY), Sp.*(deltaX*deltaY), allF, allD, MT, vectorT, NX, NX, NY...
     , 2, NY-1, 2, NX-1, false); 
@@ -43,7 +43,9 @@ M = Mleft + Mright;
 
 [MT, vectorT] = generateBoundaryEquations(bounds, MT, vectorT, NX, NY, allF, allD, sol2);
 [M, vector] = generateBoundaryEquations(bounds, M, vector, nx, ny, allF, allD, sol);
-[M, vector] = generateGlueEquations(M, vector, floor(ny/2)+1, nx, ny);
+[M, vector] = generateGlueEquations(M, vector, floor(ny/2)+1, nx, ny, true);
+[M, vector] = generateGlueEquations(M, vector, floor(ny/2)+2, nx, ny, false);
+
 
 full(MT);
 vectorT;
@@ -60,7 +62,12 @@ end
 
 
 solMatrix = reshape(sol, nx, ny);
-solTogether = reshape(solT, NX, NY);
+solTogether = reshape(solT, NX, NY)
+
+solMatrix(:,floor(ny/2)+2) = [];
+solMatrix(:,floor(ny/2)+1) = [];
+
+solMatrix
 
 figure(1);
 mesh(solMatrix);
