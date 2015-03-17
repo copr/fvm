@@ -54,13 +54,13 @@ for j=1:nx
                     vectorOut(index) = vals(j, i);
                 else % jestli je na vychode neumann
                     
-%                     an = 0;
-%                     as = 0;
+%                      an = 0;
+%                      as = 0;
                      ae = 0;
 %                     
-                    line = assign(index, ap, an, as, ae, aw, nx, ny);
+                    line = assign(index, 1, 0, 0, 0, -1, nx, ny);
                     Mout(index,1:end) = line;
-                    vectorOut(index) = bounds.e;
+                    vectorOut(index) = 0;
                 end
             end
             
@@ -80,7 +80,7 @@ for j=1:nx
                 end
             end
             
-            if j == nx % zapadni kraj
+            if j == nx % severni kraj
                 if bounds.n_is_d % jestli je dirichlet na severu
                     Mout(index, index) = 1;
                     vectorOut(index) = vals(j, i);
