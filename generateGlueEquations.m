@@ -1,4 +1,6 @@
 function [ M, vector ] = generateGlueEquations(M, vector, i, nx, ny, left )
+%generuje slepovaci rovnice left je flag ktery rika jestli generuju rovnice
+%z leva nebo z prava 
 for j=1:nx
     index = (i-1)*nx + j;
     if left
