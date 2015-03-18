@@ -6,11 +6,12 @@ deltaY = Ly/NY;
 nx = NX;
 ny = NY+2;
 n = nx*ny;
-vector = zeros(n, 1);
+
 
 sol = zeros(nx, ny);
 sol2 = zeros(NX, NY);
 
+%nastaveni kraju pro generovani okrajovych rovnic
 sol(1,:) = bounds.s;
 sol(:,1) = bounds.w;
 sol(end, :) = bounds.n;
@@ -21,58 +22,53 @@ sol2(:,1) = bounds.w;
 sol2(end, :) = bounds.n;
 sol2(:, end) = bounds.e;
 
- Mleft = sparse(n, n); vectorL = zeros(n, 1);
- Mright = sparse(n, n); vectorR = zeros(n, 1);
- MT = sparse(NX*NY, NX*NY); vectorT = zeros(NX*NY, 1);
+Mleft = sparse(n, n); vectorL = zeros(n, 1);
+Mright = sparse(n, n); vectorR = zeros(n, 1);
+M = sparse(NX*NY, NX*NY); vector = zeros(NX*NY, 1);
 
 [allF,allD] = generateFsandDs(n, u, v, ro, gama, deltaX, deltaY);
 
 
-[Mleft, vector] = generateNonBoundaryEquations(Su.*(deltaX*deltaY), Sp.*(deltaX*deltaY), allF, allD, Mleft, vector, NX, nx, ny ...
-    , 2, floor(ny/2), 2, nx-1);
+[Mleft, vectorL] = generateNonBoundaryEquations(Su.*(deltaX*deltaY), Sp.*(deltaX*deltaY), allF, allD, Mleft, vectorL, NX, nx, ny ...
+    , 2, floor(ny/2), 2, nx-1); %vygeneruju matici pro levou cast
 
-[Mright, vector] = generateNonBoundaryEquations(Su.*(deltaX*deltaY), Sp.*(deltaX*deltaY), allF, allD, Mright, vector, NX, nx, ny ...
-    , floor(ny/2)+3, ny-1, 2, nx-1);
+[Mright, vectorR] = generateNonBoundaryEquations(Su.*(deltaX*deltaY), Sp.*(deltaX*deltaY), allF, allD, Mright, vectorR, NX, nx, ny ...
+    , floor(ny/2)+3, ny-1, 2, nx-1); %vygeneruju matici pro pravou cast
 
-[MT, vectorT] = generateNonBoundaryEquations(Su.*(deltaX*deltaY), Sp.*(deltaX*deltaY), allF, allD, MT, vectorT, NX, NX, NY...
-    , 2, NY-1, 2, NX-1, false); 
+[M, vector] = generateNonBoundaryEquations(Su.*(deltaX*deltaY), Sp.*(deltaX*deltaY), allF, allD, M, vector, NX, NX, NY...
+    , 2, NY-1, 2, NX-1);  %vygeneruju si matici pro cele at si to muzu vyzkouset
 % Mleft
 % size(Mleft)
 % Mright
-M = Mleft + Mright;
+MGlued = Mleft + Mright; %dam do kupy obe matice
+vectorGlued = vectorL + vectorR; %spojim vektory
 
-[MT, vectorT] = generateBoundaryEquations(bounds, MT, vectorT, NX, NY, allF, allD, sol2);
-[M, vector] = generateBoundaryEquations(bounds, M, vector, nx, ny, allF, allD, sol);
-[M, vector] = generateGlueEquations(M, vector, floor(ny/2)+1, nx, ny, true);
-[M, vector] = generateGlueEquations(M, vector, floor(ny/2)+2, nx, ny, false);
+[M, vector] = generateBoundaryEquations(bounds, M, vector, NX, NY, allF, allD, sol2); %vygeneruju okraje pro kontrolni matici
+[MGlued, vectorGlued] = generateBoundaryEquations(bounds, MGlued, vectorGlued, nx, ny, allF, allD, sol); % vygeneruju okrajove rovnice pro slepenou matici
+[MGlued, vectorGlued] = generateGlueEquations(MGlued, vectorGlued, floor(ny/2)+1, nx, ny, true); %vygeneruju slepovaci rovnice pro levou stranu
+[MGlued, vectorGlued] = generateGlueEquations(MGlued, vectorGlued, floor(ny/2)+2, nx, ny, false); %vygeneruju slepovaci rovnice pro pravou stranu
 
 
-full(MT);
-vectorT;
-
-sol = M\vector;
-solT = MT\vectorT;
+solG = MGlued\vectorGlued;
+solCh = M\vector;
 %sol = pcg_chol(M, vector, 0.0000001);
-if NX == 4
-    full(M)
-    vector
-    sol
-end
 
 
 
-solMatrix = reshape(sol, nx, ny);
-solTogether = reshape(solT, NX, NY)
 
-solMatrix(:,floor(ny/2)+2) = [];
-solMatrix(:,floor(ny/2)+1) = [];
+solCheck = reshape(solCh, NX, NY);
+solGlued = reshape(solG, nx, ny);
 
-solMatrix
+solGlued(:,floor(ny/2)+2) = [];
+solGlued(:,floor(ny/2)+1) = []; %vyhodim ty sloupce ktere funguji jako lepeni
+
+solCheck
+solGlued
 
 figure(1);
-mesh(solMatrix);
+mesh(solCheck);
 figure(2);
-mesh(solTogether);
+mesh(solGlued);
 
 
 
