@@ -2,8 +2,10 @@ function [Mout, vectorOut] = generateBoundaryEquations(bounds, Min, vectorIn, nx
 % Vygeneruje Matici a vektor pravych stran pro kontrolni objemy  ktere
 % JSOU na okrajich
 
+%Von Neumanny vytahnout do vedlejsi funkce
 Mout = Min;
 vectorOut = vectorIn;
+
 
 for j=1:nx
     for i=1:ny
@@ -15,16 +17,52 @@ for j=1:nx
         De = allD(index, 1); Dw = allD(index, 2);
         Dn = allD(index, 3); Ds = allD(index, 4);
         
-        ae = max3(-Fe, De - Fe/2, 0); % podle knizky strana 124
-        aw = max3( Fw, Dw + Fw/2, 0); % kapitola 5.7.2
-        an = max3( Fs, Ds + Fs/2, 0); % je tohle hybridni diferencovani
-        as = max3(-Fn, Dn - Fn/2, 0); % chtel jsem to obecneji ale asi to nejde tak lehce
+        ae = max([-Fe, De - Fe/2, 0]); % podle knizky strana 124
+        aw = max([ Fw, Dw + Fw/2, 0]); % kapitola 5.7.2
+        an = max([ Fs, Ds + Fs/2, 0]); % je tohle hybridni diferencovani
+        as = max([-Fn, Dn - Fn/2, 0]); % chtel jsem to obecneji ale asi to nejde tak lehce
         ap = ae + aw + an + as;
         
-        if (i == 1 && j == 1 || i == 1 && j == nx || ...
-                i == ny && j == 1 || i == ny && j == nx) %hnus
-            Mout(index, index) = 1; %rohy
-            vectorOut(index) = 0;
+%         if (i == 1 && j == 1 || i == 1 && j == nx || ...
+%                 i == ny && j == 1 || i == ny && j == nx) %hnus
+%             Mout(index, index) = 1; %rohy
+%             vectorOut(index) = 0;
+%             continue;
+%         end
+        
+        if (i == 1 && j == 1)
+            ap = an + ae;
+            line = assign(index, ap, an, 0, ae, 0, nx, ny);
+            S = 0;
+            Mout(index,1:end) = line;
+            vectorOut(index) = S;
+            continue;
+        end
+        
+        if (i == 1 && j == nx)
+            ap = as + ae;
+            line = assign(index, ap, 0, as, ae, 0, nx, ny);
+            S = 0;
+            Mout(index,1:end) = line;
+            vectorOut(index) = S;
+            continue;
+        end
+        
+        if (i == ny && j == 1 )
+            ap = an + aw;
+            line = assign(index, ap, an, 0, 0, aw, nx, ny);
+            S = 0;
+            Mout(index,1:end) = line;
+            vectorOut(index) = S;
+            continue;
+        end
+        
+        if (i == ny && j == nx)
+            ap = as + aw;
+            line = assign(index, ap, 0, as, 0, aw, nx, ny);
+            S = 0;
+            Mout(index,1:end) = line;
+            vectorOut(index) = S;
             continue;
         end
         
@@ -34,73 +72,53 @@ for j=1:nx
             
             if i == 1 % zapadni kraj
                 if bounds.w_is_d % jestli je dirichlet na zapade
-                    Mout(index, index) = 1;
-                    vectorOut(index) = vals(j, i);
+                    line = assign(index, 1, 0, 0, 0, 0, nx, ny);
+                    S = vals(j, i);
                 else % jestli je na zapade neumann
-%                     
-%                     an = 0;
-%                     as = 0;
-                     aw = 0;
-                    
-                    line = assign(index, ap, an, as, ae, aw, nx, ny);
-                    Mout(index,1:end) = line;
-                    vectorOut(index) = bounds.w;
+                    ap = ae + an + as;
+                    line = assign(index, ap, an, as, ae, 0, nx, ny);
+                    S = bounds.w;
                 end
             end
             
             if i == ny % vychodni kraj
                 if bounds.e_is_d % jestli je dirichlet na vychode
-                    Mout(index, index) = 1;
-                    vectorOut(index) = vals(j, i);
+                    line = assign(index, 1, 0, 0, 0, 0, nx, ny);
+                    S = vals(j, i);
                 else % jestli je na vychode neumann
-                    
-%                      an = 0;
-%                      as = 0;
-                     ae = 0;
-%                     
-                    line = assign(index, 1, 0, 0, 0, -1, nx, ny);
-                    Mout(index,1:end) = line;
-                    vectorOut(index) = 0;
+                    ap = aw + an + as;
+                    line = assign(index, ap, an, as, 0, aw, nx, ny);
+                    S = bounds.e;
                 end
             end
             
             if j == 1 % jizni kraj
                 if bounds.s_is_d % jestli je dirichlet na jihu
-                    Mout(index, index) = 1;
-                    vectorOut(index) = vals(j, i);
+                    line = assign(index, 1, 0, 0, 0, 0, nx, ny);
+                    S = vals(j, i);
                 else % jestli je na jihode neumann
-                    
-%                     ae = 0;
-                     as = 0;
-%                     aw = 0;
-                    
-                    line = assign(index, ap, an, as, ae, aw, nx, ny);
-                    Mout(index,1:end) = line;
-                    vectorOut(index) = bounds.s;
+                    ap = aw + an + ae;
+                    line = assign(index, ap, an, 0, ae, aw, nx, ny);
+                    S = bounds.s;
                 end
             end
             
             if j == nx % severni kraj
                 if bounds.n_is_d % jestli je dirichlet na severu
-                    Mout(index, index) = 1;
-                    vectorOut(index) = vals(j, i);
+                    line = assign(index, 1, 0, 0, 0, 0, nx, ny);
+                    S = vals(j, i);
                 else % jestli je na severu neumann
-
-                    
-%                     an = 0;
-%                     ae = 0;
-                     aw = 0;
-                    
-                    line = assign(index, ap, an, as, ae, aw, nx, ny);
-                    Mout(index,1:end) = line;
-                    vectorOut(index) = bounds.n;
+                    ap = aw + ae + as;               
+                    line = assign(index, ap, 0, as, ae, aw, nx, ny);
+                    S = bounds.n;
                 end
             end
-            
-
+            Mout(index,1:end) = line;
+            vectorOut(index) = S;
         end
     end
 end
 
 end
+
 
