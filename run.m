@@ -2,15 +2,15 @@ v.e = 0;
 v.n = 0;
 v.s = 0;
 v.w = 0;
-v.e_is_d = false;
+v.e_is_d = true;
 v.n_is_d = true;
 v.s_is_d = true;
 v.w_is_d = true;
 u.e = 0;
 u.n = 0;
 u.s = 0;
-u.w = 0.01;
-u.e_is_d = false;
+u.w = 0;
+u.e_is_d = true;
 u.n_is_d = true;
 u.s_is_d = true;
 u.w_is_d = true;
@@ -18,17 +18,17 @@ bounds.u = u; % zadani okrajovych podminek
 bounds.v = v;
 
 %type podminek 0 - zed, 1 - pohybujici se zed, 2 - inlet, 3 - outlet
-types.ntype = 0; 
-types.wtype = 2; 
-types.etype = 2; 
+types.ntype = 1; 
+types.wtype = 0; 
+types.etype = 0; 
 types.stype = 0; 
 
-bounds.movingWallSpeed = 0;
+bounds.movingWallSpeed = 1;
 bounds.types = types;
 
 Lx = 5;
 Ly = 5;
-n = 30;
+n = 20;
 gama = 1;
 ro = 1;
 my_ep = 0.000001;
