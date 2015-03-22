@@ -41,16 +41,19 @@ if types.ntype == 3
     end
 end
 if types.stype == 3
-    u(1, :) = ustar(2, :);
-    v(1, :) = vstar(2, :);
-    Muout = sum(u(1,2:end-1));
+    u(1, 2:end-1) = ustar(2, 2:end-1);
+    v(1, 2:end-1) = vstar(2, 2:end-1);
+    Mvin = sum(v(end, 2:end-1));
     Mvout = sum(v(1,2:end-1));
-    if Muout ~= 0
-        u(1, :) = u(1, :) * Muin/Muout;
-    end
+%     if Muout ~= 0
+%         u(1, :) = u(1, :) * Muin/Muout;
+%     end
     if Mvout ~= 0
-        v(1, :) = v(1, :) * Mvin/Mvout;
+        v(1, 2:end-1)
+        v(1, 2:end-1) = v(1, 2:end-1) .* abs(Mvout/Mvin);
+        v(1, 2:end-1)
     end
+    
 end
 
 if types.wtype == 3
@@ -66,21 +69,17 @@ if types.wtype == 3
     end
 end
 if types.etype == 3
-     Muin = sum(ustar(2:end-1, 1));
-%     Muout = sum(ustar(end, 2:end-1));
-%     if ~isnan(Muin/Muout)
-%         u(:, end) = u(:, end);% .* (Muin/Muout);
-%     end
-    Muout = sum(u(2:end-1,end-1));
-    Mvout = sum(v(2:end-1,end-1));
+    
+    Muin = sum(ustar(2:end-1, 1));
+    Muout = sum(ustar(2:end-1,end-1));
     if Muout ~= 0
-        u(2:end-1, end) = ustar(2:end-1, end-1);
-        u(:, end) = u(:, end) .* Muin/Muout;
+       u(2:end-1, end) = ustar(2:end-1, end-1);
+        u(2:end-1, end) = u(2:end-1, end) .* Muin/Muout;
     end
- %   if Mvout ~= 0
-        v(:, end) = vstar(:, end-1);
-        %v(:, end) = v(:, end) .* Mvin/Mvout;
-  %  end
+   if Mvout ~= 0
+       v(:, end) = vstar(:, end-1);
+%         v(:, end) = v(:, end) .* Mvin/Mvout;
+   end
 end
 
 end

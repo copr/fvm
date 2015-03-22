@@ -26,20 +26,20 @@ types.stype = 0;
 bounds.movingWallSpeed = 1;
 bounds.types = types;
 
-Lx = 5;
-Ly = 5;
+Lx = 1;
+Ly = 1;
 n = 20;
-gama = 1;
-ro = 1;
-my_ep = 0.000001;
+gama = 0.01;
+ro = 10;
+my_ep = 0.0001;
 Su = 0;
 Sp = 0;
 
-Re = ro*v.s*Ly/gama
+Re = ro*1*Ly/gama
 
 [ustar, vstar, pstar] = simple(n,n,bounds,Su, Sp,Lx,Ly,gama, ro, my_ep);
 
-vykreslovaciFce = @(x) mesh(x);
+vykreslovaciFce = @(x) surface(x);
 figure('name', 'u');
 vykreslovaciFce(ustar);
 figure('name', 'v');

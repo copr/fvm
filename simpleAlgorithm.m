@@ -19,8 +19,8 @@ VSu = zeros(size(vstar));
 vold = zeros(vnx, vny);
 uold = zeros(unx, uny);
 sources = ones(pnx,pny);
-alfaU = 0.8; %relaxace rychlosti
-alfaP = 0.4; %relaxace tlaku
+alfaU = 0.7; %relaxace rychlosti
+alfaP = 0.3; %relaxace tlaku
 it = 0;
 while it < 100 && ~convergence(sources(2:end-1,2:end-1), my_ep)
     [ustar, vstar] = checkOutlet(bounds, ustar, vstar);

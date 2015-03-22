@@ -19,7 +19,8 @@ for j=2:nx-1
         aw = max3( Fw, Dw + Fw/2, 0); % kapitola 5.7.2
         an = max3( Fs, Ds + Fs/2, 0); % je tohle hybridni diferencovani
         as = max3(-Fn, Dn - Fn/2, 0); 
-        ap = ae + aw + an + as - Sp(j,i);
+        deltaF = Fe - Fw + Fn - Fs;
+        ap = ae + aw + an + as - Sp(j,i);% + deltaF;
         
         line = assign(index, ap, an, as, ae, aw, nx, ny);
         Mout(index,1:end) = line;

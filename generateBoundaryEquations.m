@@ -21,50 +21,51 @@ for j=1:nx
         aw = max([ Fw, Dw + Fw/2, 0]); % kapitola 5.7.2
         an = max([ Fs, Ds + Fs/2, 0]); % je tohle hybridni diferencovani
         as = max([-Fn, Dn - Fn/2, 0]); % chtel jsem to obecneji ale asi to nejde tak lehce
-        ap = ae + aw + an + as;
+        deltaF = Fe - Fw + Fn - Fs;
+        ap = ae + aw + an + as + deltaF;
         
-%         if (i == 1 && j == 1 || i == 1 && j == nx || ...
-%                 i == ny && j == 1 || i == ny && j == nx) %hnus
-%             Mout(index, index) = 1; %rohy
-%             vectorOut(index) = 0;
+        if (i == 1 && j == 1 || i == 1 && j == nx || ...
+                i == ny && j == 1 || i == ny && j == nx) %hnus
+            Mout(index, index) = 1; %rohy
+            vectorOut(index) = 0;
+            continue;
+        end
+        
+%         if (i == 1 && j == 1)
+%             ap = an + ae;
+%             line = assign(index, ap, an, 0, ae, 0, nx, ny);
+%             S = 0;
+%             Mout(index,1:end) = line;
+%             vectorOut(index) = S;
 %             continue;
 %         end
-        
-        if (i == 1 && j == 1)
-            ap = an + ae;
-            line = assign(index, ap, an, 0, ae, 0, nx, ny);
-            S = 0;
-            Mout(index,1:end) = line;
-            vectorOut(index) = S;
-            continue;
-        end
-        
-        if (i == 1 && j == nx)
-            ap = as + ae;
-            line = assign(index, ap, 0, as, ae, 0, nx, ny);
-            S = 0;
-            Mout(index,1:end) = line;
-            vectorOut(index) = S;
-            continue;
-        end
-        
-        if (i == ny && j == 1 )
-            ap = an + aw;
-            line = assign(index, ap, an, 0, 0, aw, nx, ny);
-            S = 0;
-            Mout(index,1:end) = line;
-            vectorOut(index) = S;
-            continue;
-        end
-        
-        if (i == ny && j == nx)
-            ap = as + aw;
-            line = assign(index, ap, 0, as, 0, aw, nx, ny);
-            S = 0;
-            Mout(index,1:end) = line;
-            vectorOut(index) = S;
-            continue;
-        end
+%         
+%         if (i == 1 && j == nx)
+%             ap = as + ae;
+%             line = assign(index, ap, 0, as, ae, 0, nx, ny);
+%             S = 0;
+%             Mout(index,1:end) = line;
+%             vectorOut(index) = S;
+%             continue;
+%         end
+%         
+%         if (i == ny && j == 1 )
+%             ap = an + aw;
+%             line = assign(index, ap, an, 0, 0, aw, nx, ny);
+%             S = 0;
+%             Mout(index,1:end) = line;
+%             vectorOut(index) = S;
+%             continue;
+%         end
+%         
+%         if (i == ny && j == nx)
+%             ap = as + aw;
+%             line = assign(index, ap, 0, as, 0, aw, nx, ny);
+%             S = 0;
+%             Mout(index,1:end) = line;
+%             vectorOut(index) = S;
+%             continue;
+%         end
         
         
         if (i == 1 || i == ny || j == 1 || j == nx) 
@@ -86,6 +87,12 @@ for j=1:nx
                     line = assign(index, 1, 0, 0, 0, 0, nx, ny);
                     S = vals(j, i);
                 else % jestli je na vychode neumann
+                    if j == ny - 1
+                        an = 0;
+                    end
+                    if j == 2
+                        as = 0;
+                    end
                     ap = aw + an + as;
                     line = assign(index, ap, an, as, 0, aw, nx, ny);
                     S = bounds.e;

@@ -14,6 +14,9 @@ deltaY = Ly/ny;
 [vnx, vny] = size(vstar);
 [pnx, pny] = size(pstar);
 
+% ustar(:,1) = 0;
+% ustar(8:14, 1) = 0.01;
+
 Mu = sparse(unx*uny, unx*uny);
 vectorU = zeros(unx*uny, 1);
 Mv = sparse(vnx*vny, vnx*vny);
@@ -22,15 +25,23 @@ vectorV = zeros(vnx*vny, 1);
 vold = zeros(vnx, vny);
 uold = zeros(unx, uny);
 
-alfaU = 0.7;
+alfaU = 0.8;
 alfaV = alfaU;
 alfaP = 0.3;
 
 sources = ones(pnx, pny);
 it = 0;
-while it < 1000 && ~convergence(sources(2:end-1,2:end-1), my_ep)
+while it < 200 && ~convergence(sources(2:end-1,2:end-1), my_ep)
     it = it+1
-    [ustar, vstar] = checkOutlet(bounds, ustar, vstar);
+
+%     figure(1)
+%     mesh(ustar);
+%     ustar
+%     figure(2)
+%     vstar
+%     mesh(vstar);
+%     waitforbuttonpress;
+    
    % ustar
     SU = zeros(unx, uny); SV = zeros(vnx, vny); SUp = zeros(unx, uny); SVp = zeros(vnx, vny);
     
@@ -53,8 +64,10 @@ while it < 1000 && ~convergence(sources(2:end-1,2:end-1), my_ep)
     [Mv, vectorV] = relax(Mv, vectorV, alfaV, vnx, vny, vold);
     [Mv, vectorV] = generateBoundaryEquations(bounds.v, Mv, vectorV, vnx, vny, FsForV, DsForV, vstar);
     
-   
 
+%     full(Mv)
+%     vectorU
+%     vectorV
     uold = ustar;
     vold = vstar;
     %vyreseni rovnic 
@@ -63,26 +76,31 @@ while it < 1000 && ~convergence(sources(2:end-1,2:end-1), my_ep)
     
     vstar = Mv\vectorV;
     vstar = reshape(vstar, vnx, vny);
-
-    
+% 
+%     ustar
+%     vstar
+%     waitforbuttonpress
     [Mp, vectorP, sources] = generetaPresureCorrectEqs(pstar, ustar, vstar, bounds, ro, gama, Su, Sp, deltaX, deltaY, Mu, Mv, sources, alfaU); % vytvoreni rovnci tlakovych korekci
-    
- 
+%     
+%     full(Mp)
+%     vectorP
+%  
     
     pcomma = pcg_chol(Mp, vectorP, my_ep);
-%     Mp(1, :) = zeros(1, length(Mp(1,:)));
-%     Mp(1,1) = 1;
-%     vectorP(1) = 0; %upevneni tlaku
+%     Mp(20, :) = zeros(1, length(Mp(1,:)));
+%     Mp(20,20) = 1;
+%     vectorP(20) = 0; %upevneni tlaku
 %     pcomma = Mp\vectorP; 
     pcomma = reshape(pcomma, pnx, pny);
-       
+    
     %korekce
     pstar = correctP(pcomma, pstar, alfaP);
     ustar = correctU(pcomma, ustar, deltaY, Mu);
     vstar = correctV(pcomma, vstar, deltaX, Mv);
 %     
-%     mesh(ustar);
-%     waitforbuttonpress;
+    [ustar, vstar] = checkOutlet(bounds, ustar, vstar);
+
+
     
 end
 
