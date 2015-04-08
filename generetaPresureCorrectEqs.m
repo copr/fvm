@@ -8,6 +8,12 @@ for i=1:ny
     for j=1:nx
         Spom = Sp;
         index = (i-1)*nx + j;
+%         
+%          if i >= 8 && i <= 13 && j >= 14 && j <= 20
+%              Mp(index, index) = 1;
+%              vectorP(index) = 0;
+%              continue;
+%          end
         
         if (i == 1 || j == 1 || i == ny || j == nx)
             Mp(index, index) = 1;
@@ -54,6 +60,7 @@ for i=1:ny
             Source = ro*ul*deltaY - ro*ur*deltaY + ro*vb*deltaX - ro*vt*deltaX;
             sources(j, i) = Source;
             ap = as + an + ae + aw;
+                
             line = assign(index, ap, an, as, ae, aw, nx, ny);
             Mp(index,1:end) = line;
             vectorP(index) = Source;

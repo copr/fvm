@@ -25,23 +25,14 @@ vectorV = zeros(vnx*vny, 1);
 vold = zeros(vnx, vny);
 uold = zeros(unx, uny);
 
-alfaU = 0.8;
+alfaU = 0.7;
 alfaV = alfaU;
 alfaP = 0.3;
 
 sources = ones(pnx, pny);
 it = 0;
-while it < 200 && ~convergence(sources(2:end-1,2:end-1), my_ep)
+while it < 203 && ~convergence(sources(2:end-1,2:end-1), my_ep)
     it = it+1
-
-%     figure(1)
-%     mesh(ustar);
-%     ustar
-%     figure(2)
-%     vstar
-%     mesh(vstar);
-%     waitforbuttonpress;
-    
    % ustar
     SU = zeros(unx, uny); SV = zeros(vnx, vny); SUp = zeros(unx, uny); SVp = zeros(vnx, vny);
     
@@ -64,10 +55,6 @@ while it < 200 && ~convergence(sources(2:end-1,2:end-1), my_ep)
     [Mv, vectorV] = relax(Mv, vectorV, alfaV, vnx, vny, vold);
     [Mv, vectorV] = generateBoundaryEquations(bounds.v, Mv, vectorV, vnx, vny, FsForV, DsForV, vstar);
     
-
-%     full(Mv)
-%     vectorU
-%     vectorV
     uold = ustar;
     vold = vstar;
     %vyreseni rovnic 
@@ -76,15 +63,16 @@ while it < 200 && ~convergence(sources(2:end-1,2:end-1), my_ep)
     
     vstar = Mv\vectorV;
     vstar = reshape(vstar, vnx, vny);
-% 
-%     ustar
-%     vstar
-%     waitforbuttonpress
+
+
     [Mp, vectorP, sources] = generetaPresureCorrectEqs(pstar, ustar, vstar, bounds, ro, gama, Su, Sp, deltaX, deltaY, Mu, Mv, sources, alfaU); % vytvoreni rovnci tlakovych korekci
-%     
+  
+%     full(Mu)
+%     vectorU
+%     full(Mv)
+%     vectorV
 %     full(Mp)
 %     vectorP
-%  
     
     pcomma = pcg_chol(Mp, vectorP, my_ep);
 %     Mp(20, :) = zeros(1, length(Mp(1,:)));
@@ -97,10 +85,21 @@ while it < 200 && ~convergence(sources(2:end-1,2:end-1), my_ep)
     pstar = correctP(pcomma, pstar, alfaP);
     ustar = correctU(pcomma, ustar, deltaY, Mu);
     vstar = correctV(pcomma, vstar, deltaX, Mv);
-%     
+    
     [ustar, vstar] = checkOutlet(bounds, ustar, vstar);
 
+%     ustar(8:end, 1:15) = 0;  
+%     vstar(8:end, 1:15) = 0;
+   % pstar(8:end, 1:16) = 0;
 
+%     figure(1)
+%     mesh(ustar);
+%     figure(2)
+%     mesh(vstar);
+%     figure(3)
+%     mesh(pstar);
+%      waitforbuttonpress;
+%  
     
 end
 

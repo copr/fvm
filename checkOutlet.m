@@ -29,31 +29,26 @@ end
 
 if types.ntype == 3
 
-    u(end, :) = ustar(end-1, :);
-    v(end, :) = vstar(end-1, :);
-    Muout = sum(u(end,2:end-1));
+    u(end, 2:end-1) = ustar(end-1, 2:end-1);
+    v(end, 2:end-1) = vstar(end-1, 2:end-1);
+%    Muout = sum(u(end,2:end-1));
     Mvout = sum(v(end,2:end-1));
-    if Muout ~= 0
-        u(end, :) = u(end, :) .* Muin/Muout;
-    end
+ 
     if Mvout ~= 0
-        v(end, :) = v(end, :) .* Mvin/Mvout;
+        v(end, 2:end-1) = v(end, 2:end-1) .* Mvin/Mvout;
     end
 end
 if types.stype == 3
     u(1, 2:end-1) = ustar(2, 2:end-1);
     v(1, 2:end-1) = vstar(2, 2:end-1);
-    Mvin = sum(v(end, 2:end-1));
-    Mvout = sum(v(1,2:end-1));
+    Mvin = sum(v(end, 2:end-1))
+    Mvout = sum(v(1,2:end-1))
 %     if Muout ~= 0
 %         u(1, :) = u(1, :) * Muin/Muout;
 %     end
-    if Mvout ~= 0
-        v(1, 2:end-1)
-        v(1, 2:end-1) = v(1, 2:end-1) .* abs(Mvout/Mvin);
-        v(1, 2:end-1)
-    end
-    
+%    if Mvout ~= 0
+        v(1, 2:end-1) = v(1, 2:end-1) .* Mvout/Mvin;
+%    end
 end
 
 if types.wtype == 3

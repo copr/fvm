@@ -26,4 +26,25 @@ if bounds.types.stype == 2
         vstar(1, :) = bounds.v.s;
         pstar(1, :) = 0;
 end
+
+if bounds.types.wtype == 0
+        ustar(:, 1) = 0;
+        vstar(:, 1) = 0;
+        pstar(:, 1) = 0;
+end
+if bounds.types.etype == 0
+        ustar(:, end) = 0;
+        vstar(:, end) = 0;
+        pstar(:, end) = 0;
+end
+if bounds.types.ntype == 0
+        ustar(end, :) = 0;
+        vstar(end, :) = 0;
+        pstar(end, :) = 0;
+end
+if bounds.types.stype == 0
+        ustar(1, :) = 0;
+        vstar(1, :) = 0;
+        pstar(1, :) = 0;
+end
 end

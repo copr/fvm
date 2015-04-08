@@ -10,16 +10,6 @@ for j=1:unx
     for i=1:uny
         index = (i-1)*unx + j;
         
-%         um = u(j, i);
-%         ul = u(j, i-1);
-%         ur = u(j, i+1);
-%         vlb = v(j-1, i);
-%         vrt = v(j, i+1);
-%         vrb = v(j-1, i+1);
-%         vlt = v(j, i);
-        
-% kdyz nebudu pouzviat von neumanna tak to takhle muzu nechat a u simplu
-% bych ho nemel ani potrebovat
         um = u(j, i);
         if i-1 < 1
             ul = 0;

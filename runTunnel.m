@@ -1,6 +1,6 @@
 v.e = 0;
 v.n = 0;
-v.s = 0;
+v.s = 0.01;
 v.w = 0;
 v.e_is_d = true;
 v.n_is_d = true;
@@ -18,26 +18,27 @@ bounds.u = u; % zadani okrajovych podminek
 bounds.v = v;
 
 %type podminek 0 - zed, 1 - pohybujici se zed, 2 - inlet, 3 - outlet
-types.ntype = 1; 
+types.ntype = 3; 
 types.wtype = 0; 
 types.etype = 0; 
-types.stype = 0; 
+types.stype = 2; 
 
 bounds.movingWallSpeed = 1;
 bounds.types = types;
 
-Lx = 1;
-Ly = 1;
-n = 20;
-gama = 0.01;
+Lx = 10;
+Ly = 10;
+nx = 20;
+ny = 20;
+gama = 1;
 ro = 10;
 my_ep = 0.0001;
 Su = 0;
 Sp = 0;
 
-Re = ro*1*Ly/gama
+Re = ro*v.s*Ly/gama
 
-[ustar, vstar, pstar] = simple(n,n,bounds,Su, Sp,Lx,Ly,gama, ro, my_ep);
+[ustar, vstar, pstar] = simple(nx,ny,bounds,Su, Sp,Lx,Ly,gama, ro, my_ep);
 
 vykreslovaciFce = @(x) surface(x);
 figure('name', 'u');
