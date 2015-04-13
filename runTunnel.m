@@ -40,6 +40,18 @@ Re = ro*v.s*Ly/gama
 
 [ustar, vstar, pstar] = simple(nx,ny,bounds,Su, Sp,Lx,Ly,gama, ro, my_ep);
 
+[us,vs] = getCenters(ustar, vstar);
+% streamline(0:nx-1, 0:ny-1, us, vs, 1, 1);
+
+[x,y] = meshgrid(0:nx-1, 0:ny-1);
+
+figure
+quiver(x,y,us,vs)
+
+startx = 0:nx-1;
+starty = 0:ny-1;
+streamline(x,y,us,vs,startx,starty)
+
 vykreslovaciFce = @(x) surface(x);
 figure('name', 'u');
 vykreslovaciFce(ustar);

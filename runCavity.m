@@ -23,14 +23,14 @@ types.wtype = 0;
 types.etype = 0; 
 types.stype = 0; 
 
-bounds.movingWallSpeed = 4;
+bounds.movingWallSpeed = 1;
 bounds.types = types;
 
 Lx = 0.1;
 Ly = 0.1;
 nx = 20;
 ny = nx;
-gama = 0.01;
+gama = 0.1;
 ro = 10;
 my_ep = 0.0001;
 Su = 0;
@@ -39,11 +39,22 @@ Sp = 0;
 Re = ro*bounds.movingWallSpeed*Ly/gama
 
 [ustar, vstar, pstar] = simple(nx,ny,bounds,Su, Sp,Lx,Ly,gama, ro, my_ep);
+[us,vs] = getCenters(ustar, vstar);
+% streamline(0:nx-1, 0:ny-1, us, vs, 1, 1);
 
-vykreslovaciFce = @(x) surface(x);
-figure('name', 'u');
-vykreslovaciFce(ustar);
-figure('name', 'v');
-vykreslovaciFce(vstar);
-figure('name', 'p');
-vykreslovaciFce(pstar);
+[x,y] = meshgrid(0:nx-1, 0:ny-1);
+
+figure
+quiver(x,y,us,vs)
+
+startx = 0:nx-1;
+starty = 0:ny-1;
+streamline(x,y,us,vs,startx,starty)
+
+% vykreslovaciFce = @(x) mesh(x);
+% figure('name', 'u');
+% vykreslovaciFce(us);
+% figure('name', 'v');
+% vykreslovaciFce(vs);
+% figure('name', 'p');
+% vykreslovaciFce(pstar);
