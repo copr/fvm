@@ -5,10 +5,11 @@ function [allF, allD] = generateFsandDsForU(u, v, ro, gama, deltaX, deltaY)
 n = unx*uny;
 allF = zeros(n, 4);
 allD = zeros(n, 4);
-
+counter = 0;
 for j=1:unx
     for i=1:uny
         index = (i-1)*unx + j;
+ 
         
         um = u(j, i);
         if i-1 < 1
@@ -35,7 +36,7 @@ for j=1:unx
             vrt = v(j, i+1);
         end
         
-        if i+1 > vny || j-1 < vnx
+        if i+1 > vny || j-1 < 1
             vrb = 0;
         else
             vrb = v(j-1, i+1);
@@ -46,6 +47,7 @@ for j=1:unx
         else
             vlt = v(j, i);
         end
+       
         
         Fw = deltaY*(ro*um + ro*ul)/2;
         Fe = deltaY*(ro*ur + ro*um)/2;
@@ -61,7 +63,11 @@ for j=1:unx
         
         allD(index, 1) = De; allD(index, 2) = Dw;
         allD(index, 3) = Dn; allD(index, 4) = Ds;
+%         u
+%         v
+%         waitforbuttonpress;
     end
 end
+
 
 end
