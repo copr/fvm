@@ -30,12 +30,25 @@ Ly = 0.1;
 n = 20;
 bounds.v = v;
 
+Re = u.n * ro * Lx/ gama
+
 vykreslovaciFce = @(x) surface(x);
 
 gama = 0.01;
 ro = 1;
 
 [ustar, vstar, pstar] = simpleAlgorithm(n,n,bounds,0,0,0.1,0.1,gama, ro, 0.000001);
+
+[us,vs] = getCenters(ustar, vstar);
+
+[x,y] = meshgrid(0:nx-1, 0:ny-1);
+
+figure
+quiver(x,y,us,vs)
+
+startx = 0:nx-1;
+starty = 0:ny-1;
+streamline(x,y,us,vs,startx,starty)
 
 figure('name', 'u');
 vykreslovaciFce(ustar);
