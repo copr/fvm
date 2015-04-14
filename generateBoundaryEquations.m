@@ -30,44 +30,7 @@ for j=1:nx
             vectorOut(index) = 0;
             continue;
         end
-        
-%         if (i == 1 && j == 1)
-%             ap = an + ae;
-%             line = assign(index, ap, an, 0, ae, 0, nx, ny);
-%             S = 0;
-%             Mout(index,1:end) = line;
-%             vectorOut(index) = S;
-%             continue;
-%         end
-%         
-%         if (i == 1 && j == nx)
-%             ap = as + ae;
-%             line = assign(index, ap, 0, as, ae, 0, nx, ny);
-%             S = 0;
-%             Mout(index,1:end) = line;
-%             vectorOut(index) = S;
-%             continue;
-%         end
-%         
-%         if (i == ny && j == 1 )
-%             ap = an + aw;
-%             line = assign(index, ap, an, 0, 0, aw, nx, ny);
-%             S = 0;
-%             Mout(index,1:end) = line;
-%             vectorOut(index) = S;
-%             continue;
-%         end
-%         
-%         if (i == ny && j == nx)
-%             ap = as + aw;
-%             line = assign(index, ap, 0, as, 0, aw, nx, ny);
-%             S = 0;
-%             Mout(index,1:end) = line;
-%             vectorOut(index) = S;
-%             continue;
-%         end
-        
-        
+
         if (i == 1 || i == ny || j == 1 || j == nx) 
             index = (i-1)*nx + j; 
             
@@ -128,4 +91,42 @@ end
 
 end
 
+        
+%         if (i == 1 && j == 1)
+%             ap = an + ae;
+%             line = assign(index, ap, an, 0, ae, 0, nx, ny);
+%             S = 0;
+%             Mout(index,1:end) = line;
+%             vectorOut(index) = S;
+%             continue;
+%         end
+%         
+%         if (i == 1 && j == nx)
+%             ap = as + ae;
+%             line = assign(index, ap, 0, as, ae, 0, nx, ny);
+%             S = 0;
+%             Mout(index,1:end) = line;
+%             vectorOut(index) = S;
+%             continue;
+%         end
+%         
+%         if (i == ny && j == 1 )
+%             ap = an + aw;
+%             line = assign(index, ap, an, 0, 0, aw, nx, ny);
+%             S = 0;
+%             Mout(index,1:end) = line;
+%             vectorOut(index) = S;
+%             continue;
+%         end
+%         
+%         if (i == ny && j == nx)
+%             ap = as + aw;
+%             line = assign(index, ap, 0, as, 0, aw, nx, ny);
+%             S = 0;
+%             Mout(index,1:end) = line;
+%             vectorOut(index) = S;
+%             continue;
+%         end
+        
+        
 
