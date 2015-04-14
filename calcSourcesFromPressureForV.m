@@ -5,4 +5,4 @@ for j=2:vnx-1
         SV(j,i) = SV(j,i) + (pstar(j, i) - pstar(j+1, i))*deltaX;
     end
 end
-end
+end 
