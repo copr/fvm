@@ -1,9 +1,10 @@
-function [ustar, vstar, pstar] = simple(nx, ny, bounds, Su, Sp, Lx, Ly, gama, ro, my_ep)
+function [ustar, vstar, pstar] = simple(nx, ny, bounds, Su, Sp, Lx, Ly, gama, ro, my_ep, alfaU, alfaV, alfaP, maxIter)
 %hlavni funkce pro spusteni SIMPLu
 %okrajove podminky jsou zadany pomoci rovnic
 %nx - pocet objemu na ose x, ny - pocet kontrolnich objemu na ose y,
 %bounds - okrajove podminky, Su,Sp - zdroje, Lx,Ly - delka oblasti v x,y
 %gama - difuzni koeficinent, ro - hustota, my_ep - pozadovana presnot
+%alfa - relaxace jednotlivych vypoctu
 %ustar - napocitane rychlosti ve smeru osy x, vstar - ve smeru y
 %pstar - tlaakove pole
 deltaX = Lx/nx;
@@ -24,14 +25,9 @@ vectorV = zeros(vnx*vny, 1);
 
 vold = zeros(vnx, vny);
 uold = zeros(unx, uny);
-
-alfaU = 0.8;
-alfaV = alfaU;
-alfaP = 0.4;
-
 sources = ones(pnx, pny);
 it = 0;
-while it < 500 && ~convergence(sources(2:end-1,2:end-1), my_ep)
+while it < maxIter && ~convergence(sources(2:end-1,2:end-1), my_ep)
     it = it+1
    % ustar
     SU = zeros(unx, uny); SV = zeros(vnx, vny); SUp = zeros(unx, uny); SVp = zeros(vnx, vny);
@@ -47,11 +43,11 @@ while it < 500 && ~convergence(sources(2:end-1,2:end-1), my_ep)
     [FsForU, DsForU] = generateFsandDsForU(ustar, vstar, ro, gama, deltaX, deltaY); % generovani koeficientu pro vsechny rovnice
     [FsForV, DsForV] = generateFsandDsForV(ustar, vstar, ro, gama, deltaX, deltaY);
 
-    [Mu, vectorU] = generateNonBoundaryEquations(SU, SUp, FsForU, DsForU, Mu, vectorU, unx, uny); % vygeneruje matici pro u s rovnicemi pro vsechny neokrajove prvky
+    [Mu, vectorU] = generateNonBoundaryEquations(SU, SUp, FsForU, DsForU, Mu, vectorU, unx, uny, deltaX, deltaY); % vygeneruje matici pro u s rovnicemi pro vsechny neokrajove prvky
     [Mu, vectorU] = relax(Mu, vectorU, alfaU, unx, uny, uold); % relaxace je uprostred aby nezmenily uz okrajove rovnice
     [Mu, vectorU] = generateBoundaryEquations(bounds.u, Mu, vectorU, unx, uny, FsForU, DsForU, ustar); % do matice mu vygeneruje rovnice pro okrajove prvky
     
-    [Mv, vectorV] = generateNonBoundaryEquations(SV, SVp, FsForV, DsForV, Mv, vectorV, vnx, vny); %to same jako predtim pro v
+    [Mv, vectorV] = generateNonBoundaryEquations(SV, SVp, FsForV, DsForV, Mv, vectorV, vnx, vny, deltaX, deltaY); %to same jako predtim pro v
     [Mv, vectorV] = relax(Mv, vectorV, alfaV, vnx, vny, vold);
     [Mv, vectorV] = generateBoundaryEquations(bounds.v, Mv, vectorV, vnx, vny, FsForV, DsForV, vstar);
     
@@ -65,20 +61,12 @@ while it < 500 && ~convergence(sources(2:end-1,2:end-1), my_ep)
     vstar = reshape(vstar, vnx, vny);
 
 
-    [Mp, vectorP, sources] = generetaPresureCorrectEqs(pstar, ustar, vstar, bounds, ro, gama, Su, Sp, deltaX, deltaY, Mu, Mv, sources, alfaU); % vytvoreni rovnci tlakovych korekci
-  
-%     full(Mu)
-%     vectorU
-%     full(Mv)
-%     vectorV
-%     full(Mp)
-%     vectorP
+    [Mp, vectorP, sources] = generetaPresureCorrectEqs(pstar, ustar, vstar, ro, deltaX, deltaY, Mu, Mv, sources); % vytvoreni rovnci tlakovych korekci
     
+%     full(Mp)
+%     waitforbuttonpress;
+
     pcomma = pcg_chol(Mp, vectorP, my_ep);
-%     Mp(20, :) = zeros(1, length(Mp(1,:)));
-%     Mp(20,20) = 1;
-%     vectorP(20) = 0; %upevneni tlaku
-%     pcomma = Mp\vectorP; 
     pcomma = reshape(pcomma, pnx, pny);
     
     %korekce
@@ -88,9 +76,6 @@ while it < 500 && ~convergence(sources(2:end-1,2:end-1), my_ep)
     
     [ustar, vstar] = checkOutlet(bounds, ustar, vstar);
 
-%     ustar(8:end, 1:15) = 0;  
-%     vstar(8:end, 1:15) = 0;
-   % pstar(8:end, 1:16) = 0;
 
 %     figure(1)
 %     mesh(ustar);
