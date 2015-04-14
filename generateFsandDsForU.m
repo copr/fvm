@@ -5,49 +5,17 @@ function [allF, allD] = generateFsandDsForU(u, v, ro, gama, deltaX, deltaY)
 n = unx*uny;
 allF = zeros(n, 4);
 allD = zeros(n, 4);
-counter = 0;
-for j=1:unx
-    for i=1:uny
+for j=2:unx-1
+    for i=2:uny-1
         index = (i-1)*unx + j;
- 
         
         um = u(j, i);
-        if i-1 < 1
-            ul = 0;
-        else
-            ul = u(j, i-1);
-        end
-        
-        if i+1 > uny
-            ur = 0;
-        else
-            ur = u(j, i+1);
-        end
-        
-        if j-1 < 1 || i > vny
-            vlb = 0;
-        else
-            vlb = v(j-1, i);
-        end
-        
-        if i+1 > vny || j > vnx
-            vrt = 0;
-        else
-            vrt = v(j, i+1);
-        end
-        
-        if i+1 > vny || j-1 < 1
-            vrb = 0;
-        else
-            vrb = v(j-1, i+1);
-        end
-            
-        if j > vnx || i > vny
-            vlt = 0;
-        else
-            vlt = v(j, i);
-        end
-       
+        ul = u(j, i-1);
+        ur = u(j, i+1);
+        vlb = v(j-1, i);
+        vrt = v(j, i+1);
+        vrb = v(j-1, i+1);
+        vlt = v(j, i);
         
         Fw = deltaY*(ro*um + ro*ul)/2;
         Fe = deltaY*(ro*ur + ro*um)/2;
@@ -68,6 +36,41 @@ for j=1:unx
 %         waitforbuttonpress;
     end
 end
-
-
 end
+
+%         um = u(j, i);
+%         if i-1 < 1
+%             ul = 0;
+%         else
+%             ul = u(j, i-1);
+%         end
+%         
+%         if i+1 > uny
+%             ur = 0;
+%         else
+%             ur = u(j, i+1);
+%         end
+%         
+%         if j-1 < 1 || i > vny
+%             vlb = 0;
+%         else
+%             vlb = v(j-1, i);
+%         end
+%         
+%         if i+1 > vny || j > vnx
+%             vrt = 0;
+%         else
+%             vrt = v(j, i+1);
+%         end
+%         
+%         if i+1 > vny || j-1 < 1
+%             vrb = 0;
+%         else
+%             vrb = v(j-1, i+1);
+%         end
+%             
+%         if j > vnx || i > vny
+%             vlt = 0;
+%         else
+%             vlt = v(j, i);
+%        end
