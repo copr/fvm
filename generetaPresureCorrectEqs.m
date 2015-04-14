@@ -8,13 +8,7 @@ for i=1:ny
     for j=1:nx
         Spom = Sp;
         index = (i-1)*nx + j;
-%         
-%          if i >= 8 && i <= 13 && j >= 14 && j <= 20
-%              Mp(index, index) = 1;
-%              vectorP(index) = 0;
-%              continue;
-%          end
-        
+
         if (i == 1 || j == 1 || i == ny || j == nx)
             Mp(index, index) = 1;
             vectorP(index) = 0;
@@ -27,7 +21,7 @@ for i=1:ny
                 ul = ustar(j, i-1);
                 ind = (i-2)*unx + j;
                 d = deltaY/Mu(ind, ind);
-                aw = ro*alfa*deltaY*d;
+                aw = ro*deltaY*d;
             end
             if i == ny-1
                 ur = ustar(j, i);
@@ -36,7 +30,7 @@ for i=1:ny
                 ur = ustar(j, i);
                 ind = (i-1)*unx + j;
                 d = deltaY/Mu(ind, ind);
-                ae = ro*alfa*deltaY*d;
+                ae = ro*deltaY*d;
             end
             if j == nx-1
                 vt = vstar(j,i);
@@ -45,16 +39,16 @@ for i=1:ny
                 vt = vstar(j, i);
                 ind = (i-1)*vnx + j;
                 d = deltaX/Mv(ind, ind);
-                an = ro*alfa*deltaX*d;
+                an = ro*deltaX*d;
             end
             if j == 2
                 vb = vstar(j-1, i);
                 as =  0;
             else
                 vb = vstar(j-1, i);
-                ind = (i-1)*vnx + j -1;
+                ind = (i-1)*vnx + j-1;
                 d = deltaX/Mv(ind, ind);
-                as = ro*alfa*deltaX*d;
+                as = ro*deltaX*d;
             end
 
             Source = ro*ul*deltaY - ro*ur*deltaY + ro*vb*deltaX - ro*vt*deltaX;
