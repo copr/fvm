@@ -32,13 +32,17 @@ nx = 20;
 ny = nx;
 gama = 0.1;
 ro = 10;
-my_ep = 0.0000001;
+my_ep = 0.0000000001;
 Su = 0;
 Sp = 0;
+alfaU = 0.8;
+alfaV = alfaU;
+alfaP = 0.4;
+maxIter = 500;
 
 Re = ro*bounds.movingWallSpeed*Ly/gama
 
-[ustar, vstar, pstar] = simple(nx,ny,bounds,Su, Sp,Lx,Ly,gama, ro, my_ep);
+[ustar, vstar, pstar] = simple(nx,ny,bounds,Su, Sp,Lx,Ly,gama, ro, my_ep, alfaU, alfaV, alfaP, maxIter);
 [us,vs] = getCenters(ustar, vstar);
 % streamline(0:nx-1, 0:ny-1, us, vs, 1, 1);
 
