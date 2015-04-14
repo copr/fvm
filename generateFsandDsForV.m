@@ -6,57 +6,18 @@ n = vnx*vny;
 allF = zeros(n, 4);
 allD = zeros(n, 4);
 
-for j=1:vnx
-    for i=1:vny
+for j=2:vnx-1
+    for i=2:vny-1
         index = (i-1)*vnx + j;
 %         
-%         vm = v(j, i);
-%         vb = v(j-1, i);
-%         vt = v(j+1, i);
-%         ulb = u(j, i-1);
-%         ult = u(j+1, i-1);
-%         urb = u(j, i);
-%         urt = u(j+1, i);
-%         
-        
-% kdyz nebudu pouzviat von neumanna tak to takhle muzu nechat a u simplu
-% bych ho nemel ani potrebovat
-          vm = v(j, i);        
-        if j-1 < 1
-            vb = 0;
-        else
-            vb = v(j-1, i);
-        end
-        
-        if j+1 > vnx
-            vt = 0;
-        else
-            vt = v(j+1, i);
-        end
-        
-        if j > unx || i-1 < 1
-            ulb = 0;
-        else
-            ulb = u(j, i-1);
-        end
-        
-        if j+1 > unx || i-1 < 1
-            ult = 0;
-        else
-            ult = u(j+1, i-1);
-        end
-        
-        if j > unx || i > uny
-            urb = 0;
-        else
-            urb = u(j, i);
-        end
-        
-        if j+1 > unx || i > uny
-            urt = 0;
-        else
-            urt = u(j+1, i);
-        end
+        vm = v(j, i);
+        vb = v(j-1, i);
+        vt = v(j+1, i);
+        ulb = u(j, i-1);
+        ult = u(j+1, i-1);
+        urb = u(j, i);
+        urt = u(j+1, i);
+
         
         Fw = deltaY*(ro*ult + ro*ulb)/2;
         Fe = deltaY*(ro*urt + ro*urb)/2;
@@ -74,3 +35,45 @@ for j=1:vnx
         allD(index, 3) = Dn; allD(index, 4) = Ds;
     end
 end
+end
+
+%         
+        
+% kdyz nebudu pouzviat von neumanna tak to takhle muzu nechat a u simplu
+% bych ho nemel ani potrebovat
+%           vm = v(j, i);        
+%         if j-1 < 1
+%             vb = 0;
+%         else
+%             vb = v(j-1, i);
+%         end
+%         
+%         if j+1 > vnx
+%             vt = 0;
+%         else
+%             vt = v(j+1, i);
+%         end
+%         
+%         if j > unx || i-1 < 1
+%             ulb = 0;
+%         else
+%             ulb = u(j, i-1);
+%         end
+%         
+%         if j+1 > unx || i-1 < 1
+%             ult = 0;
+%         else
+%             ult = u(j+1, i-1);
+%         end
+%         
+%         if j > unx || i > uny
+%             urb = 0;
+%         else
+%             urb = u(j, i);
+%         end
+%         
+%         if j+1 > unx || i > uny
+%             urt = 0;
+%         else
+%             urt = u(j+1, i);
+%         end
