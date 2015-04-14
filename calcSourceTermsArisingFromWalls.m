@@ -43,5 +43,10 @@ if types.etype == 1
     VSuout(:, end-1) = 2*mu*bounds.movingWallSpeed*deltaY/deltaX;
 end
 
+% USpout = USpout .* (deltaX*deltaY);
+% VSpout = VSpout .* (deltaX*deltaY); 
+% USuout = USuout .* (deltaX*deltaY);
+% VSuout = VSuout .* (deltaX*deltaY);
+
 end
 
