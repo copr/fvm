@@ -32,7 +32,7 @@ nx = 20;
 ny = nx;
 gama = 0.1;
 ro = 10;
-my_ep = 0.0001;
+my_ep = 0.0000001;
 Su = 0;
 Sp = 0;
 
@@ -51,10 +51,14 @@ startx = 0:nx-1;
 starty = 0:ny-1;
 streamline(x,y,us,vs,startx,starty)
 
-% vykreslovaciFce = @(x) mesh(x);
-% figure('name', 'u');
-% vykreslovaciFce(us);
-% figure('name', 'v');
-% vykreslovaciFce(vs);
-% figure('name', 'p');
-% vykreslovaciFce(pstar);
+%ustar(:, floor(nx/2))
+
+vykreslovaciFce = @(x) surface(x);
+figure('name', 'magnitude');
+vykreslovaciFce(sqrt(us.^2+vs.^2));
+figure('name', 'u');
+vykreslovaciFce(us);
+figure('name', 'v');
+vykreslovaciFce(vs);
+figure('name', 'p');
+vykreslovaciFce(pstar);

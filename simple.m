@@ -25,13 +25,13 @@ vectorV = zeros(vnx*vny, 1);
 vold = zeros(vnx, vny);
 uold = zeros(unx, uny);
 
-alfaU = 0.7;
+alfaU = 0.8;
 alfaV = alfaU;
-alfaP = 0.3;
+alfaP = 0.4;
 
 sources = ones(pnx, pny);
 it = 0;
-while it < 203 && ~convergence(sources(2:end-1,2:end-1), my_ep)
+while it < 500 && ~convergence(sources(2:end-1,2:end-1), my_ep)
     it = it+1
    % ustar
     SU = zeros(unx, uny); SV = zeros(vnx, vny); SUp = zeros(unx, uny); SVp = zeros(vnx, vny);
@@ -102,5 +102,4 @@ while it < 203 && ~convergence(sources(2:end-1,2:end-1), my_ep)
 %  
     
 end
-
 end
