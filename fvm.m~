@@ -7,6 +7,7 @@ nx = NX;
 ny = NY+1;
 n = nx*ny;
 
+
 A = sparse(n, n);
 vectorA =  zeros(n,1);
 B = sparse(2*(nx+2+ny), n);
@@ -17,12 +18,18 @@ vectorG = zeros(nx, 1);
 
 
 %nastaveni kraju pro generovani okrajovych rovnic
+sol(1,:) = bounds.s;
+sol(:,1) = bounds.w;
+sol(end, :) = bounds.n;
+sol(:, end) = bounds.e;
 
 
-[allF,allD] = generateFsandDs(nx, ny, u, v, ro, gama, deltaX, deltaY);
 
 
-[A, vectorA] = generateNonBoundaryEquations(Su.*(deltaX*deltaY), Sp.*(deltaX*deltaY), allF, allD, A, vectorA, nx, ny); %vygeneruju matici pro levou cast
+[allF,allD] = generateFsandDs(n, u, v, ro, gama, deltaX, deltaY);
+
+
+[A, vectorA] = generateNonBoundaryEquations(Su.*(deltaX*deltaY), Sp.*(deltaX*deltaY), allF, allD,A, vectorA nx, ny); %vygeneruju matici pro levou cast
 full(A)
 vectorA
 sdfsd

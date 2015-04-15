@@ -8,10 +8,10 @@ v.s_is_d = true;
 v.w_is_d = true;
 
 
-n = 11;
+n = 5;
 
-Su = ones(n, n+2);
-Sp = zeros(n, n+2);
+Su = ones(n, n+1);
+Sp = zeros(n, n+1);
 
 gama = 1;
 ro = 1;

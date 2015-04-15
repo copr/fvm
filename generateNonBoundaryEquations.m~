@@ -32,14 +32,13 @@ for j=1:nx
         
         ae = max([-Fe, De - Fe/2, 0]); % podle knizky strana 124 
         aw = max([ Fw, Dw + Fw/2, 0]); % kapitola 5.7.2
-        an = max([ Fn, Dn + Fn/2, 0]); % je tohle hybridni diferencovani
-        as = max([-Fs, Ds - Fs/2, 0]); 
+        an = max([ Fs, Ds + Fs/2, 0]); % je tohle hybridni diferencovani
+        as = max([-Fn, Dn - Fn/2, 0]); 
 
         ap = ae + aw + an + as - Sp(j,i);
         vectorOut(index) = Su(j, i);
         i
         j
-        as
         line = assign(index, ap, an, as, ae, aw, nx, ny);
         Mout(index,1:end) = line;
         index = index+1;
