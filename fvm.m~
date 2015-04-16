@@ -1,52 +1,76 @@
 function [] = fvm(u, v, ro, gama, Lx, Ly, NX, NY, bounds, Su, Sp)
-%UNTITLED10 Summary of this function goes here
-%   Detailed explanation goes here
+
 deltaX = Lx/NX;
 deltaY = Ly/NY;
 nx = NX;
 ny = NY+1;
 n = nx*ny;
 
+A = sparse(NX*NY, NX*NY);
+vectorA = zeros(NX*NY, 1);
 
-A = sparse(n, n);
-vectorA =  zeros(n,1);
-B = sparse(2*(nx+2+ny), n);
-vectorB = zeros(2*(nx+2+ny), 1);
+B = sparse(NX, NX*NY);
+vectorB = zeros(NX, 1);
+
+nxA1 = NX;
+nyA1 = floor((NY+1)/2);
+nA1 = nxA1*nyA1;
+
+nxA2 = NX;
+nyA2 = ceil((NY+1)/2);
+nA2 = nxA2*nyA2;
+
+A1 = sparse(nA1, nA1);
+vectorA1 =  zeros(nA1,1);
+A2 = sparse(nA2, nA2);
+vectorA2 =  zeros(nA2,1);
+B1 = sparse(nx, n);
+vectorB1 = zeros(nx, 1);
 G = sparse(nx, n);
 vectorG = zeros(nx, 1);
 
 
 
 %nastaveni kraju pro generovani okrajovych rovnic
-sol(1,:) = bounds.s;
-sol(:,1) = bounds.w;
-sol(end, :) = bounds.n;
-sol(:, end) = bounds.e;
 
 
+[allF,allD] = generateFsandDs(nx, ny, u, v, ro, gama, deltaX, deltaY);
+
+[A, vectorA] = generateNonBoundaryEquations(Su.*(deltaX*deltaY), Sp.*(deltaX*deltaY), allF, allD, A, vectorA, NX, NY); 
+[B, vectorB] = generateBoundaryEquations(B, vectorB, NX, NX*NY);
+[Bx, ~] = size(B);
+M = [A B'; B zeros(Bx, Bx)];
+res = M \ [vectorA; vectorB];
+res = reshape(res, NX, NY+Bx/NY);
+figure(2)
+mesh(res);
+%size(res)
+
+[A1, vectorA1] = generateNonBoundaryEquations(Su.*(deltaX*deltaY), Sp.*(deltaX*deltaY), allF, allD, A1, vectorA1, nxA1, nyA1); 
+[A2, vectorA2] = generateNonBoundaryEquations(Su.*(deltaX*deltaY), Sp.*(deltaX*deltaY), allF, allD, A2, vectorA2, nxA2, nyA2); 
+[B, vectorB] = generateBoundaryEquations(B, vectorB, NX, NX*(NY+1)); 
+[G, vectorG] = generateGlueEquations(G, vectorG, floor(ny/2)+1, NX, NX*(NY+1)); %vygeneruju slepovaci rovnice
+BG = [B;G];
+[BGx, ~] = size(BG);
+bigA = [A1 0; 0 A2]
+vectorBigA = [vectorA1; vecto
+M = [bigA, BG'; BG zeros(BGx, BGx)];
+V = [vectorA; vectorB; vectorG];
 
 
-[allF,allD] = generateFsandDs(n, u, v, ro, gama, deltaX, deltaY);
-
-
-[A, vectorA] = generateNonBoundaryEquations(Su.*(deltaX*deltaY), Sp.*(deltaX*deltaY), allF, allD,A, vectorA nx, ny); %vygeneruju matici pro levou cast
-full(A)
-vectorA
-sdfsd
-[M, vector] = generateBoundaryEquations(bounds,NX, NY, allF, allD, sol2); %vygeneruju okraje pro kontrolni matici
-[MGlued, vectorGlued] = generateGlueEquations(nx, ny); %vygeneruju slepovaci rovnice pro pravou stranu
-
-
-
+sol = M\V;
+size(sol)
+sol = reshape(sol, nx, ny+BGx/nx);
+size(sol)
+figure(1)
+res
+sol
+mesh(sol);
 %sol = pcg_chol(M, vector, 0.0000001);
 
 
 
 
-figure(1);
-mesh(solCheck);
-figure(2);
-mesh(solGlued);
 
 
 

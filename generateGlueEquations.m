@@ -1,18 +1,13 @@
-function [ M, vector ] = generateGlueEquations(M, vector, i, nx, ny, left )
-%generuje slepovaci rovnice left je flag ktery rika jestli generuju rovnice
-%z leva nebo z prava 
-for j=1:nx
-    index = (i-1)*nx + j;
-    if left
-        index2 = (i+1)*nx + j;
-    else
-        index2 = (i-3)*nx + j;
-    end
-    line = sparse(nx*ny, 1);
-    line(index) = 1;
-    line(index2) = -1;
+function [ M, vector ] = generateGlueEquations(M, vector, i, nx, n)
+%generuje slepovaci rovnice
+index = 1;
+for j=(i-1)*nx+1:(i-1)*nx+nx
+    line = sparse(1, n);
+    line(j) = 1;
+    line(j+nx) = -1;
     M(index, :) = line;
     vector(index) = 0;
+    index = index+1;
 end
 end
 

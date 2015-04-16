@@ -7,11 +7,11 @@ for i=1:ny
     for j=1:nx
         if i == floor(ny/2)+1
             prevIndex = index-nx;
-            allF(prevIndex, 1) = allF(prevIndex-1, 1); allF(prevIndex, 2) = allF(prevIndex-1, 2);
-            allF(prevIndex, 3) = allF(prevIndex-1, 3); allF(prevIndex, 4) = allF(prevIndex-1, 4);
+            allF(index, 1) = allF(prevIndex, 1); allF(index, 2) = allF(prevIndex, 2);
+            allF(index, 3) = allF(prevIndex, 3); allF(index, 4) = allF(prevIndex, 4);
             
-            allD(prevIndex, 1) = allD(prevIndex-1, 1); allD(prevIndex, 2) = allD(prevIndex-1, 2);
-            allD(prevIndex, 3) = allD(prevIndex-1, 3); allD(prevIndex, 4) = allD(prevIndex-1, 4);
+            allD(index, 1) = allD(prevIndex, 1); allD(index, 2) = allD(prevIndex, 2);
+            allD(index, 3) = allD(prevIndex, 3); allD(index, 4) = allD(prevIndex, 4);
         else
             Fw = u*ro*deltaY;
             Fe = Fw;
