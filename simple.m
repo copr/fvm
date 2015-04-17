@@ -20,8 +20,12 @@ deltaY = Ly/ny;
 
 Mu = sparse(unx*uny, unx*uny);
 vectorU = zeros(unx*uny, 1);
+Bu = sparse(1,1);
+vectorBu = zeros(1,1);
 Mv = sparse(vnx*vny, vnx*vny);
 vectorV = zeros(vnx*vny, 1);
+Bv = sparse(1,1);
+vectorBv = zeros(1,1);
 
 vold = zeros(vnx, vny);
 uold = zeros(unx, uny);
@@ -43,13 +47,13 @@ while it < maxIter && ~convergence(sources(2:end-1,2:end-1), my_ep)
     [FsForU, DsForU] = generateFsandDsForU(ustar, vstar, ro, gama, deltaX, deltaY); % generovani koeficientu pro vsechny rovnice
     [FsForV, DsForV] = generateFsandDsForV(ustar, vstar, ro, gama, deltaX, deltaY);
 
-    [Mu, vectorU] = generateNonBoundaryEquations(SU, SUp, FsForU, DsForU, Mu, vectorU, unx, uny, deltaX, deltaY); % vygeneruje matici pro u s rovnicemi pro vsechny neokrajove prvky
+    [Mu, vectorU] = generateNonBoundaryEquations(SU, SUp, FsForU, DsForU, Mu, vectorU, unx, uny); % vygeneruje matici pro u s rovnicemi pro vsechny neokrajove prvky
     [Mu, vectorU] = relax(Mu, vectorU, alfaU, unx, uny, uold); % relaxace je uprostred aby nezmenily uz okrajove rovnice
-    [Mu, vectorU] = generateBoundaryEquations(bounds.u, Mu, vectorU, unx, uny, FsForU, DsForU, ustar); % do matice mu vygeneruje rovnice pro okrajove prvky
+    [Bu, vectorBu] = generateBoundaryEquations(bounds.u, Bu, vectorBu, unx, uny, FsForU, DsForU, ustar); % do matice mu vygeneruje rovnice pro okrajove prvky
     
-    [Mv, vectorV] = generateNonBoundaryEquations(SV, SVp, FsForV, DsForV, Mv, vectorV, vnx, vny, deltaX, deltaY); %to same jako predtim pro v
+    [Mv, vectorV] = generateNonBoundaryEquations(SV, SVp, FsForV, DsForV, Mv, vectorV, vnx, vny); %to same jako predtim pro v
     [Mv, vectorV] = relax(Mv, vectorV, alfaV, vnx, vny, vold);
-    [Mv, vectorV] = generateBoundaryEquations(bounds.v, Mv, vectorV, vnx, vny, FsForV, DsForV, vstar);
+    [Bv, vectorBv] = generateBoundaryEquations(bounds.v, Bv, vectorBv, vnx, vny, FsForV, DsForV, vstar);
     
     uold = ustar;
     vold = vstar;
@@ -74,7 +78,7 @@ while it < maxIter && ~convergence(sources(2:end-1,2:end-1), my_ep)
     ustar = correctU(pcomma, ustar, deltaY, Mu);
     vstar = correctV(pcomma, vstar, deltaX, Mv);
     
-    [ustar, vstar] = checkOutlet(bounds, ustar, vstar);
+ %   [ustar, vstar] = checkOutlet(bounds, ustar, vstar);
 
 
 %     figure(1)
