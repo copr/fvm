@@ -30,46 +30,61 @@ G = sparse(NX, NX*(NY+1));
 vectorG = zeros(NX, 1);
 
 
-%nastaveni kraju pro generovani okrajovych rovnic
 
 
 [allF,allD] = generateFsandDs(nx, ny, u, v, ro, gama, deltaX, deltaY);
 
 [A, vectorA] = generateNonBoundaryEquations(Su.*(deltaX*deltaY), Sp.*(deltaX*deltaY), allF, allD, A, vectorA, NX, NY, NX+10); 
-[B, vectorB] = generateBoundaryEquations(B, vectorB, NX, NX*NY);
+[B, vectorB] = generateBoundaryEquations(B, vectorB, NX, NX*NY); %vytvareni okrajovych rovnic
 [Bx, ~] = size(B);
 M = [A B'; B zeros(Bx, Bx)];
-res = M \ [vectorA; vectorB];
-res = reshape(res, NX, NY+Bx/NY);
-figure(2)
+res_ = M \ [vectorA; vectorB];
+%res = reshape(res_, NX, NY+Bx/NY);
+res_restr = res_(1:end-Bx);
+res = reshape(res_restr , NX, []);  
+% vykreslime jen tzv. primarni promenne, Lagrangeovy multiplikatory (tzv. dualni promenne) zde nemaji co delat
+
+figure('name', 'jen okraje')
 mesh(res);
 %size(res)
 
-[A1, vectorA1] = generateNonBoundaryEquations(Su.*(deltaX*deltaY), Sp.*(deltaX*deltaY), allF, allD, A1, vectorA1, nxA1, nyA1, nxA1+10); 
-[A2, vectorA2] = generateNonBoundaryEquations(Su.*(deltaX*deltaY), Sp.*(deltaX*deltaY), allF, allD, A2, vectorA2, nxA2, nyA2, 1); 
-[B1, vectorB1] = generateBoundaryEquations(B1, vectorB1, NX, NX*(NY+1)); 
+[A1, vectorA1] = generateNonBoundaryEquations(Su.*(deltaX*deltaY), Sp.*(deltaX*deltaY), allF, allD, A1, vectorA1, nxA1, nyA1, nxA1+10); %generovani jedne matice
+[A2, vectorA2] = generateNonBoundaryEquations(Su.*(deltaX*deltaY), Sp.*(deltaX*deltaY), allF, allD, A2, vectorA2, nxA2, nyA2, 1);  %generovani druhe matice
+[B1, vectorB1] = generateBoundaryEquations(B1, vectorB1, NX, NX*(NY+1)); %generovani okraju
 [G, vectorG] = generateGlueEquations(G, vectorG, floor(ny/2), NX, NX*(NY+1)); %vygeneruju slepovaci rovnice
-BG = [B1;G];
+BG = [B1;G]; %spojeni okrajove a slepovaci matice
 [BGx, ~] = size(BG);
 [X1, Y1] = size(A1);
 [X2, Y2] = size(A2);
-bigA = [A1 sparse(X1, Y2); sparse(X2, Y1) A2];
+bigA = [A1 sparse(X1, Y2); sparse(X2, Y1) A2]; %spojeni dvou casti domeny 
 vectorBigA = [vectorA1; vectorA2];
-M = [bigA, BG'; BG zeros(BGx, BGx)];
+M = [bigA, BG'; BG zeros(BGx, BGx)]; %spojeni matic s okrajemi a slepenim
 V = [vectorBigA; vectorB1; vectorG];
 
 
-sol = M\V;
-size(sol)
-sol = reshape(sol, nx, ny+BGx/nx);
-size(sol)
-figure(1)
-res
-sol
+sol_ = M\V;
+%sol = reshape(sol_, nx, ny+BGx/nx);
+
+% 1) vykreslime jen tzv. primarni promenne, Lagrangeovy multiplikatory
+%    (tzv. dualni promenne) zde nemaji co delat
+% 2) jeste navic potrebujeme udelat restrikci reseni na puvodni pocet neznamych
+% 3) pro ted: predpokladam, ze prvnich [size(G,1)] neznamych v druhe subdomene
+%    je zdvojenych - obecne bych to potrebovala mit nekde ulozeno 
+%    cislovani uzlu globalniho (puvodniho, nedekomponovaneho) problemu
+%    a odpovidajici cislovani lokalniho (noveho, dekomponovaneho,
+%    zdvojeneho) problemu
+sol_restr = sol_([1:200,201+size(G,1):end-BGx]);
+
+sol = reshape(sol_restr, nx, []);
+figure('name', 'slepene')
+%res
+%sol
 mesh(sol);
-%sol = pcg_chol(M, vector, 0.0000001);
 
+%"error"
+max(abs([res_restr - sol_restr]))
 
+%keyboard
 
 
 
