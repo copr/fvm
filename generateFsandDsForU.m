@@ -10,7 +10,7 @@ for j=1:unx
         index = (i-1)*unx + j;
         
         um = u(j, i);
-        if i-1 < 1
+        if i <= 1
             ul = 0;
         else
             ul = u(j, i-1);

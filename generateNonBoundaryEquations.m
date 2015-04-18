@@ -4,9 +4,10 @@ function [Mout, vectorOut] = generateNonBoundaryEquations(Su, Sp, allF, allD, Mi
 
 Mout = Min;
 vectorOut = vectorIn;
-index = 1;
+order = 1;
 for i=1:ny
     for j=1:nx
+        index = (i-1)*nx + j;
         Fe = allF(index, 1); Fw = allF(index, 2);
         Fn = allF(index, 3); Fs = allF(index, 4);
         
@@ -39,12 +40,11 @@ for i=1:ny
         %             ap = ae + aw + an + as;
         %             vectorOut(index) = 0;
         %         else
-        vectorOut(index) = Su(j, i);
+        vectorOut(order) = Su(j, i);
         ap = ae + aw + an + as - Sp(j,i) + deltaF;
-        %         end
         line = assign(index, ap, an, as, ae, aw, nx, ny);
-        Mout(index, :) = line;
-        index = index+1;
+        Mout(order, :) = line;
+        order = order+1;
     end
 end
 end

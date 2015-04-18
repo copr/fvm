@@ -39,7 +39,6 @@ while it < maxIter && ~convergence(sources, my_ep)
     
     %spocita zdroje ktere vychazeji z toho ze na okrajich jsou zadane zdi
     [SUp, SVp, SU, SV] = calcSourceTermsArisingFromWalls(bounds, SUp, SVp, SU, SV, deltaX, deltaY, gama);
-    
    
     
     %spocita zdroje, ktere vychazeji z hodnot tlaku
@@ -57,6 +56,7 @@ while it < maxIter && ~convergence(sources, my_ep)
     [Mv, vectorV] = generateNonBoundaryEquations(SV, SVp, FsForV, DsForV, Mv, vectorV, vnx, vny); %to same jako predtim pro v
     [Mv, vectorV] = relax(Mv, vectorV, alfaV, vnx, vny, vold);
     [Bv, vectorBv] = generateBoundaryEquations(bounds.v, Bv, vectorBv, vnx, vny);
+    
     
     MatrixU = mergeMatrixAndBounds(Mu, Bu);
     MatrixV = mergeMatrixAndBounds(Mv, Bv);
@@ -78,10 +78,10 @@ while it < maxIter && ~convergence(sources, my_ep)
     vstar = reshape(vstar, vnx, vny);
 
     [Mp, vectorP, sources] = generetaPresureCorrectEqs(pstar, ustar, vstar, ro, deltaX, deltaY, Mu, Mv, sources); % vytvoreni rovnci tlakovych korekci
-    
+
     pcomma = pcg_chol(Mp, vectorP, my_ep);
     pcomma = reshape(pcomma, pnx, pny);
-    
+
     %korekce
     pstar = correctP(pcomma, pstar, alfaP);
     ustar = correctU(pcomma, ustar, deltaY, Mu);
