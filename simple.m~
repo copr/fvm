@@ -32,7 +32,7 @@ vold = zeros(vnx, vny);
 uold = zeros(unx, uny);
 sources = ones(pnx, pny);
 it = 0;
-while it < maxIter && ~convergence(sources, my_ep)
+while it < maxIter && ~convergence(sources(2:end-1,2:end-1), my_ep)
     it = it+1
    % ustar
     SU = zeros(unx, uny); SV = zeros(vnx, vny); SUp = zeros(unx, uny); SVp = zeros(vnx, vny);
@@ -40,20 +40,19 @@ while it < maxIter && ~convergence(sources, my_ep)
     %spocita zdroje ktere vychazeji z toho ze na okrajich jsou zadane zdi
     [SUp, SVp, SU, SV] = calcSourceTermsArisingFromWalls(bounds, SUp, SVp, SU, SV, deltaX, deltaY, gama);
     
-   
-    
+
     %spocita zdroje, ktere vychazeji z hodnot tlaku
     SU = calcSourcesFromPressureForU(SU, pstar, unx, uny, deltaX, deltaY);
     SV = calcSourcesFromPressureForV(SV, pstar, vnx, vny, deltaX, deltaY);
-  
-%     SU
+    
     [FsForU, DsForU] = generateFsandDsForU(ustar, vstar, ro, gama, deltaX, deltaY); % generovani koeficientu pro vsechny rovnice
     [FsForV, DsForV] = generateFsandDsForV(ustar, vstar, ro, gama, deltaX, deltaY);
 
     [Mu, vectorU] = generateNonBoundaryEquations(SU, SUp, FsForU, DsForU, Mu, vectorU, unx, uny); % vygeneruje matici pro u s rovnicemi pro vsechny neokrajove prvky
     [Mu, vectorU] = relax(Mu, vectorU, alfaU, unx, uny, uold); % relaxace je uprostred aby nezmenily uz okrajove rovnice
     [Bu, vectorBu] = generateBoundaryEquations(bounds.u, Bu, vectorBu, unx, uny); % do matice mu vygeneruje rovnice pro okrajove prvky
-
+    
+    size(Mv)
     [Mv, vectorV] = generateNonBoundaryEquations(SV, SVp, FsForV, DsForV, Mv, vectorV, vnx, vny); %to same jako predtim pro v
     [Mv, vectorV] = relax(Mv, vectorV, alfaV, vnx, vny, vold);
     [Bv, vectorBv] = generateBoundaryEquations(bounds.v, Bv, vectorBv, vnx, vny);
@@ -68,10 +67,6 @@ while it < maxIter && ~convergence(sources, my_ep)
     ustar = MatrixU\vectorUB;
     ustar = ustar(1:end-2*(unx+uny-2));
     ustar = reshape(ustar, unx, uny);
-%     
-%     full(Mu)
-%     vectorU
-%     waitforbuttonpress
     
     vstar = MatrixV\vectorVB;
     vstar = vstar(1:end-2*(vnx+vny-2));
@@ -79,6 +74,9 @@ while it < maxIter && ~convergence(sources, my_ep)
 
     [Mp, vectorP, sources] = generetaPresureCorrectEqs(pstar, ustar, vstar, ro, deltaX, deltaY, Mu, Mv, sources); % vytvoreni rovnci tlakovych korekci
     
+     full(Mp)
+     waitforbuttonpress;
+
     pcomma = pcg_chol(Mp, vectorP, my_ep);
     pcomma = reshape(pcomma, pnx, pny);
     
@@ -86,16 +84,17 @@ while it < maxIter && ~convergence(sources, my_ep)
     pstar = correctP(pcomma, pstar, alfaP);
     ustar = correctU(pcomma, ustar, deltaY, Mu);
     vstar = correctV(pcomma, vstar, deltaX, Mv);
+    
  %   [ustar, vstar] = checkOutlet(bounds, ustar, vstar);
 
-% 
-%     figure(1)
-%     mesh(ustar);
-%     figure(2)
-%     mesh(vstar);
-%     figure(3)
-%     mesh(pstar);
-%      waitforbuttonpress;
+
+    figure(1)
+    mesh(ustar);
+    figure(2)
+    mesh(vstar);
+    figure(3)
+    mesh(pstar);
+     waitforbuttonpress;
 %  
     
 end
