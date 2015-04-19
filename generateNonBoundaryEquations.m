@@ -33,8 +33,8 @@ for i=1:ny
         
         ae = max([-Fe, De - Fe/2, 0]); % podle knizky strana 124
         aw = max([ Fw, Dw + Fw/2, 0]); % kapitola 5.7.2
-        an = max([ Fn, Dn + Fn/2, 0]); % je tohle hybridni diferencovani
-        as = max([-Fs, Ds - Fs/2, 0]);
+        an = max([-Fn, Dn - Fn/2, 0]); % je tohle hybridni diferencovani
+        as = max([ Fs, Ds + Fs/2, 0]);
         deltaF = Fe - Fw + Fn - Fs;
         %         if i == Icko
         %             ap = ae + aw + an + as;
