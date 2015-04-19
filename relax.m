@@ -5,7 +5,7 @@ function [ M, vector ] = relax( Min, vectorIn, alfa, nx, ny, old)
 % uolds = reshape(old, nx*ny, 1);
 % for index=1:nx*ny
 %     j = rem(index-1, nx) + 1;
-%     i =	floor(index/nx) + 1;
+%     i =	floor((index-1)/nx) + 1;
 %     if i > 1 && i < ny && j > 1 && j < nx
 % %         'dostali se sem'
 % %         i
@@ -17,7 +17,7 @@ function [ M, vector ] = relax( Min, vectorIn, alfa, nx, ny, old)
 %     end
 % end
 % end
-
+% 
 D = diag(diag(Min));
 M = (Min - D) + D./alfa;
 uolds = reshape(old, nx*ny, 1);

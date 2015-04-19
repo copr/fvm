@@ -1,8 +1,8 @@
 function [ustar, vstar, pstar] = initUVPstar(nx, ny, bounds, ustar, vstar, pstar)
 %inicializuje uvp pole
 if nargin == 3
-    ustar = zeros(nx+2, ny + 1);
-    vstar = zeros(nx + 1, ny+2);
+    ustar = zeros(nx + 2, ny + 1);
+    vstar = zeros(nx + 1, ny + 2);
     pstar = zeros(nx, ny);
 end
 

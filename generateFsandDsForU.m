@@ -10,7 +10,7 @@ for j=1:unx
         index = (i-1)*unx + j;
         
         um = u(j, i);
-        if i <= 1
+        if i-1 < 1
             ul = 0;
         else
             ul = u(j, i-1);
@@ -28,32 +28,40 @@ for j=1:unx
             vlb = v(j-1, i);
         end
         
-        if i+1 > vny || j > vnx
-            vrt = 0;
-        else
-            vrt = v(j, i+1);
-        end
-        
         if i+1 > vny || j-1 < 1
             vrb = 0;
         else
             vrb = v(j-1, i+1);
         end
         
+        
+        if i+1 > vny || j > vnx
+            vrt = 0;
+        else
+            vrt = v(j, i+1);
+        end
+        
+
         if j > vnx || i > vny
             vlt = 0;
         else
             vlt = v(j, i);
         end
         
-        Fw = deltaY*(ro*um + ro*ul)/2;
-        Fe = deltaY*(ro*ur + ro*um)/2;
-        Fs = deltaX*(ro*vrb + ro*vlb)/2;
-        Fn = deltaX*(ro*vrt + ro*vlt)/2;
+        Fw = deltaY*ro*(um + ul)/2;
+        Fe = deltaY*ro*(ur + um)/2;
+        Fs = deltaX*ro*(vrb + vlb)/2;
+        Fn = deltaX*ro*(vrt + vlt)/2;
         Dw = deltaY*gama/deltaX;
         De = deltaY*gama/deltaX;
         Ds = deltaX*gama/deltaY;
         Dn = deltaX*gama/deltaY;
+        
+        if i == 2 && j > 1 && j < unx
+            index
+            vrb
+            vlb
+        end
         
         allF(index, 1) = Fe; allF(index, 2) = Fw;
         allF(index, 3) = Fn; allF(index, 4) = Fs;

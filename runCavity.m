@@ -7,7 +7,7 @@ v.n_is_d = true;
 v.s_is_d = true;
 v.w_is_d = true;
 u.e = 0;
-u.n = 1;
+u.n = 0;
 u.s = 0;
 u.w = 0;
 u.e_is_d = true;
@@ -18,12 +18,12 @@ bounds.u = u; % zadani okrajovych podminek
 bounds.v = v;
 
 %type podminek 0 - zed, 1 - pohybujici se zed, 2 - inlet, 3 - outlet
-types.ntype = 2; 
-types.wtype = 0; 
+types.ntype = 0; 
+types.wtype = 1; 
 types.etype = 0; 
 types.stype = 0; 
 
-bounds.movingWallSpeed = 0;
+bounds.movingWallSpeed = 1;
 bounds.types = types;
 
 Lx = 0.1;
@@ -42,7 +42,7 @@ maxIter = 500;
 
 Re = ro*bounds.movingWallSpeed*Ly/gama
 
-[ustar, vstar, pstar] = simple(nx,ny,bounds,Su, Sp,Lx,Ly,gama, ro, my_ep, alfaU, alfaV, alfaP, maxIter);
+[ustar, vstar, pstar] = simple(nx, ny, bounds, Su, Sp, Lx, Ly, gama, ro, my_ep, alfaU, alfaV, alfaP, maxIter);
 [us,vs] = getCenters(ustar, vstar);
 % streamline(0:nx-1, 0:ny-1, us, vs, 1, 1);
 ustar

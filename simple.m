@@ -39,23 +39,22 @@ while it < maxIter && ~convergence(sources, my_ep)
     
     %spocita zdroje ktere vychazeji z toho ze na okrajich jsou zadane zdi
     [SUp, SVp, SU, SV] = calcSourceTermsArisingFromWalls(bounds, SUp, SVp, SU, SV, deltaX, deltaY, gama);
-   
+    
     
     %spocita zdroje, ktere vychazeji z hodnot tlaku
     SU = calcSourcesFromPressureForU(SU, pstar, unx, uny, deltaX, deltaY);
     SV = calcSourcesFromPressureForV(SV, pstar, vnx, vny, deltaX, deltaY);
-  
-%     SU
+
     [FsForU, DsForU] = generateFsandDsForU(ustar, vstar, ro, gama, deltaX, deltaY); % generovani koeficientu pro vsechny rovnice
     [FsForV, DsForV] = generateFsandDsForV(ustar, vstar, ro, gama, deltaX, deltaY);
     
-    [Mu, vectorU] = generateNonBoundaryEquations(SU, SUp, FsForU, DsForU, Mu, vectorU, unx, uny); % vygeneruje matici pro u s rovnicemi pro vsechny neokrajove prvky
+    [Mu, vectorU] = generateNonBoundaryEquations(SU, SUp, FsForU, DsForU, Mu, vectorU, unx, uny, 0); % vygeneruje matici pro u s rovnicemi pro vsechny neokrajove prvky
     [Mu, vectorU] = relax(Mu, vectorU, alfaU, unx, uny, uold); % relaxace je uprostred aby nezmenily uz okrajove rovnice
-    [Bu, vectorBu] = generateBoundaryEquations(bounds.u, Bu, vectorBu, unx, uny); % do matice mu vygeneruje rovnice pro okrajove prvky
+    [Bu, vectorBu] = generateBoundaryEquations(Bu, vectorBu, unx, uny, ustar); % do matice mu vygeneruje rovnice pro okrajove prvky
 
-    [Mv, vectorV] = generateNonBoundaryEquations(SV, SVp, FsForV, DsForV, Mv, vectorV, vnx, vny); %to same jako predtim pro v
+    [Mv, vectorV] = generateNonBoundaryEquations(SV, SVp, FsForV, DsForV, Mv, vectorV, vnx, vny, 0); %to same jako predtim pro v
     [Mv, vectorV] = relax(Mv, vectorV, alfaV, vnx, vny, vold);
-    [Bv, vectorBv] = generateBoundaryEquations(bounds.v, Bv, vectorBv, vnx, vny);
+    [Bv, vectorBv] = generateBoundaryEquations(Bv, vectorBv, vnx, vny, vstar);
     
     
     MatrixU = mergeMatrixAndBounds(Mu, Bu);
@@ -64,14 +63,14 @@ while it < maxIter && ~convergence(sources, my_ep)
     vectorVB = [vectorV; vectorBv];
     uold = ustar;
     vold = vstar;
+% 
+%     full(MatrixU)
+%     vectorUB
+%     waitforbuttonpress
     %vyreseni rovnic 
     ustar = MatrixU\vectorUB;
     ustar = ustar(1:end-2*(unx+uny-2));
     ustar = reshape(ustar, unx, uny);
-%     
-%     full(Mu)
-%     vectorU
-%     waitforbuttonpress
     
     vstar = MatrixV\vectorVB;
     vstar = vstar(1:end-2*(vnx+vny-2));
