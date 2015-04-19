@@ -28,7 +28,7 @@ bounds.types = types;
 
 Lx = 0.1;
 Ly = 0.1;
-nx = 20;
+nx = 4;
 ny = nx;
 gama = 0.1;
 ro = 10;

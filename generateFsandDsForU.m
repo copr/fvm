@@ -39,12 +39,12 @@ for j=1:unx
         else
             vrb = v(j-1, i+1);
         end
-            
+        
         if j > vnx || i > vny
             vlt = 0;
         else
             vlt = v(j, i);
-       end
+        end
         
         Fw = deltaY*(ro*um + ro*ul)/2;
         Fe = deltaY*(ro*ur + ro*um)/2;
@@ -60,9 +60,6 @@ for j=1:unx
         
         allD(index, 1) = De; allD(index, 2) = Dw;
         allD(index, 3) = Dn; allD(index, 4) = Ds;
-%         u
-%         v
-%         waitforbuttonpress;
     end
 end
 end
