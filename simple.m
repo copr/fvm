@@ -48,7 +48,7 @@ while it < maxIter && ~convergence(sources, my_ep)
 %     SU
     [FsForU, DsForU] = generateFsandDsForU(ustar, vstar, ro, gama, deltaX, deltaY); % generovani koeficientu pro vsechny rovnice
     [FsForV, DsForV] = generateFsandDsForV(ustar, vstar, ro, gama, deltaX, deltaY);
-
+    
     [Mu, vectorU] = generateNonBoundaryEquations(SU, SUp, FsForU, DsForU, Mu, vectorU, unx, uny); % vygeneruje matici pro u s rovnicemi pro vsechny neokrajove prvky
     [Mu, vectorU] = relax(Mu, vectorU, alfaU, unx, uny, uold); % relaxace je uprostred aby nezmenily uz okrajove rovnice
     [Bu, vectorBu] = generateBoundaryEquations(bounds.u, Bu, vectorBu, unx, uny); % do matice mu vygeneruje rovnice pro okrajove prvky
