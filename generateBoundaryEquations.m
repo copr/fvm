@@ -5,6 +5,7 @@ vectorOut = vectorIn;
 order = 1;
 n = nx*ny;
 % zapadni strana
+
 for index=1:Mnx
 
 end
