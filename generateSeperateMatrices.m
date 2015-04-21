@@ -1,5 +1,5 @@
 function [bigMatrix, bigVector] = generateSeperateMatrices(Su, Sp, allF, allD, nx, ny, Mnx, Mny)
-
+%vytvori velkou matici z Mnx*Mny malych matic
 [Ms, Vs, Fs, Ds, Sus, Sps] = giveMeAll(Su, Sp, allF, allD, Mnx, Mny, nx, ny);
 bigMatrix = sparse(0,0);
 bigVector = [];
