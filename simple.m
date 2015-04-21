@@ -55,7 +55,18 @@ while it < maxIter && ~convergence(sources, my_ep)
     [Mv, vectorV] = generateNonBoundaryEquations(SV, SVp, FsForV, DsForV, Mv, vectorV, vnx, vny, 0); %to same jako predtim pro v
     [Mv, vectorV] = relax(Mv, vectorV, alfaV, vnx, vny, vold);
     [Bv, vectorBv] = generateBoundaryEquations(Bv, vectorBv, vnx, vny, vstar);
-    
+    %
+    %     [bx, by] = size(Bu);
+    %     l = zeros(1, by);
+    %     l(7:12) = 0.001;
+    %     for i=1:bx
+    %         k = full(Bu(i, :)) > l;
+    %         if sum(k) ~= 0
+    %             k
+    %         end
+    %     end
+%     full(Bu)
+%     size(Mu)
     
     MatrixU = mergeMatrixAndBounds(Mu, Bu);
     MatrixV = mergeMatrixAndBounds(Mv, Bv);
@@ -63,9 +74,8 @@ while it < maxIter && ~convergence(sources, my_ep)
     vectorVB = [vectorV; vectorBv];
     uold = ustar;
     vold = vstar;
-% 
+    % %
 %     full(MatrixU)
-%     vectorUB
 %     waitforbuttonpress
     %vyreseni rovnic 
     ustar = MatrixU\vectorUB;
@@ -80,6 +90,7 @@ while it < maxIter && ~convergence(sources, my_ep)
 
     pcomma = pcg_chol(Mp, vectorP, my_ep);
     pcomma = reshape(pcomma, pnx, pny);
+   
 
     %korekce
     pstar = correctP(pcomma, pstar, alfaP);
@@ -87,15 +98,7 @@ while it < maxIter && ~convergence(sources, my_ep)
     vstar = correctV(pcomma, vstar, deltaX, Mv);
  %   [ustar, vstar] = checkOutlet(bounds, ustar, vstar);
 
-% 
-%     figure(1)
-%     mesh(ustar);
-%     figure(2)
-%     mesh(vstar);
-%     figure(3)
-%     mesh(pstar);
-%      waitforbuttonpress;
-%  
+
     
 end
 end

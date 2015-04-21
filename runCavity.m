@@ -1,7 +1,7 @@
 v.e = 0;
 v.n = 0;
 v.s = 0;
-v.w = 0;
+v.w = 1;
 v.e_is_d = true;
 v.n_is_d = true;
 v.s_is_d = true;
@@ -19,16 +19,16 @@ bounds.v = v;
 
 %type podminek 0 - zed, 1 - pohybujici se zed, 2 - inlet, 3 - outlet
 types.ntype = 0; 
-types.wtype = 1; 
+types.wtype = 2; 
 types.etype = 0; 
 types.stype = 0; 
 
-bounds.movingWallSpeed = 1;
+bounds.movingWallSpeed = 0;
 bounds.types = types;
 
 Lx = 0.1;
 Ly = 0.1;
-nx = 4;
+nx = 20;
 ny = nx;
 gama = 0.1;
 ro = 10;
@@ -45,8 +45,6 @@ Re = ro*bounds.movingWallSpeed*Ly/gama
 [ustar, vstar, pstar] = simple(nx, ny, bounds, Su, Sp, Lx, Ly, gama, ro, my_ep, alfaU, alfaV, alfaP, maxIter);
 [us,vs] = getCenters(ustar, vstar);
 % streamline(0:nx-1, 0:ny-1, us, vs, 1, 1);
-ustar
-vstar
 [x,y] = meshgrid(0:nx-1, 0:ny-1);
 
 figure

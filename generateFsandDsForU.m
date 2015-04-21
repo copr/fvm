@@ -1,7 +1,7 @@
 function [allF, allD] = generateFsandDsForU(u, v, ro, gama, deltaX, deltaY)
 %vygeneruje vsechny koeficienty F a D pro U-rovnice.
 [unx, uny] = size(u);
-[vnx, vny] = size(v);
+[vnx, ~] = size(v);
 n = unx*uny;
 allF = zeros(n, 4);
 allD = zeros(n, 4);
@@ -22,27 +22,27 @@ for j=1:unx
             ur = u(j, i+1);
         end
         
-        if j-1 < 1 || i > vny
+        if j-1 < 1
             vlb = 0;
         else
             vlb = v(j-1, i);
         end
         
-        if i+1 > vny || j-1 < 1
+        if j-1 < 1
             vrb = 0;
         else
             vrb = v(j-1, i+1);
         end
         
         
-        if i+1 > vny || j > vnx
+        if j > vnx
             vrt = 0;
         else
             vrt = v(j, i+1);
         end
         
 
-        if j > vnx || i > vny
+        if j > vnx
             vlt = 0;
         else
             vlt = v(j, i);
@@ -56,13 +56,7 @@ for j=1:unx
         De = deltaY*gama/deltaX;
         Ds = deltaX*gama/deltaY;
         Dn = deltaX*gama/deltaY;
-        
-        if i == 2 && j > 1 && j < unx
-            index
-            vrb
-            vlb
-        end
-        
+  
         allF(index, 1) = Fe; allF(index, 2) = Fw;
         allF(index, 3) = Fn; allF(index, 4) = Fs;
         
