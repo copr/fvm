@@ -1,10 +1,15 @@
-function [Mout, vectorOut] = generateBoundaryEquations(Min, vectorIn, nx, ny, vals)
+function [Mout, vectorOut] = generateBoundaryEquations(Min, vectorIn, nx, ny, vals, Mnx, Mny, Sus)
 %vygeneruje rovnice ktere upevnuji hodnoty na krajich
 Mout = Min;
 vectorOut = vectorIn;
 order = 1;
 n = nx*ny;
 % zapadni strana
+for index=1:Mnx
+
+end
+
+
 for index=2:nx-1 
     j = rem(index-1, nx) + 1;
     i =	floor((index-1)/nx) + 1;
