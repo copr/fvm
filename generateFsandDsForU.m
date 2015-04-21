@@ -3,12 +3,10 @@ function [allF, allD] = generateFsandDsForU(u, v, ro, gama, deltaX, deltaY)
 [unx, uny] = size(u);
 [vnx, ~] = size(v);
 n = unx*uny;
-allF = zeros(n, 4);
-allD = zeros(n, 4);
+allF = zeros(unx, uny);
+allD = zeros(unx, uny);
 for j=1:unx
     for i=1:uny
-        index = (i-1)*unx + j;
-        
         um = u(j, i);
         if i-1 < 1
             ul = 0;
@@ -57,11 +55,9 @@ for j=1:unx
         Ds = deltaX*gama/deltaY;
         Dn = deltaX*gama/deltaY;
   
-        allF(index, 1) = Fe; allF(index, 2) = Fw;
-        allF(index, 3) = Fn; allF(index, 4) = Fs;
+        allF(j, i, 1:4) = [Fe, Fw, Fn, Fs];
+        allD(j, i, 1:4) = [De, Dw, Dn, Ds];
         
-        allD(index, 1) = De; allD(index, 2) = Dw;
-        allD(index, 3) = Dn; allD(index, 4) = Ds;
     end
 end
 end
