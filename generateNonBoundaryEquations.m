@@ -1,4 +1,4 @@
-function [Mout, vectorOut] = generateNonBoundaryEquations(Su, Sp, allF, allD, Min, vectorIn, nx, ny, Icko)
+function [Mout, vectorOut] = generateNonBoundaryEquations(Su, Sp, allF, allD, Min, vectorIn, nx, ny)
 % Vygeneruje Matici a vektor pravych stran pro kontrolni objemy  ktere
 % NEjsou na okrajich
 
@@ -38,13 +38,9 @@ for i=1:ny
         as = max([ Fs, Ds + Fs/2, 0]);
         
         deltaF = Fe - Fw + Fn - Fs;
-        if i == Icko
-            ap = ae + aw + an + as + deltaf;
-            vectorOut(index) = 0;
-        else
-            vectorOut(order) = Su(j, i);
-            ap = ae + aw + an + as - Sp(j,i) + deltaF;
-        end
+        vectorOut(order) = Su(j, i);
+        ap = ae + aw + an + as - Sp(j,i) + deltaF;
+        %         end
         line = assign(index, ap, an, as, ae, aw, nx, ny);
         Mout(order, :) = line;
         order = order+1;
