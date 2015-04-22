@@ -1,50 +1,23 @@
-function [Mout, vectorOut] = generateBoundaryEquations(Min, vectorIn, nx, ny, vals, Mnx, Mny, Sus)
+function [Mout, vectorOut] = generateBoundaryEquations(vals, indexes)
 %vygeneruje rovnice ktere upevnuji hodnoty na krajich
-Mout = Min;
-vectorOut = vectorIn;
 order = 1;
+[nx, ny] = size(indexes);
 n = nx*ny;
-% zapadni strana
-
-for index=1:Mnx
-
-end
-
-
-for index=2:nx-1 
-    j = rem(index-1, nx) + 1;
-    i =	floor((index-1)/nx) + 1;
-    line = assign(index, 1, 0, 0, 0, 0, n, 1);
-    Mout(order, :) = line;
-    vectorOut(order) = vals(j, i);
-    order = order + 1;
-end 
-% vychodni strana
-for index=n-nx+2:n-1
-    j = rem(index-1, nx) + 1;
-    i =	floor((index-1)/nx) + 1;
-    line = assign(index, 1, 0, 0, 0, 0, n, 1);
-    Mout(order, :) = line;
-    vectorOut(order) = vals(j, i);
-    order = order + 1;
-end
-% jizni strana
-for index=1:nx:n-nx+1
-    j = rem(index-1, nx) + 1;
-    i =	floor((index-1)/nx) + 1;
-    line = assign(index, 1, 0, 0, 0, 0, n, 1);
-    Mout(order, :) = line;
-    vectorOut(order) = vals(j, i);
-    order = order + 1;
-end 
-% severni strana
-for index=nx:nx:n
-    j = rem(index-1, nx) + 1;
-    i =	floor((index-1)/nx) + 1;
-    line = assign(index, 1, 0, 0, 0, 0, n, 1);
-    Mout(order, :) = line;
-    vectorOut(order) = vals(j, i);
-    order = order + 1;
+Mout = sparse(1,n);
+vectorOut = zeros(1,1);
+[inx, iny] = size(indexes);
+for j=1:inx
+    for i=1:iny
+        if(i == 1 || j == 1 || i == ny || j == nx)
+            line = assign(indexes(j, i), 1, 0, 0, 0, 0, nx, ny);
+            Mout(order, :) = line;
+            vectorOut(order, 1) = 0;
+            order = order + 1;
+        end
+        if i == 1
+            vectorOut(order-1,1) = 1;
+        end
+    end
 end
 end
 
