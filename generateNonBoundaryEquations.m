@@ -1,4 +1,4 @@
-function [Mout, vectorOut] = generateNonBoundaryEquations(Su, Sp, allF, allD, Min, vectorIn, nx, ny)
+function [Mout, vectorOut] = generateNonBoundaryEquations(Su, Sp, allF, allD, Min, vectorIn, nx, ny, vlajka1, vlajka2)
 % Vygeneruje Matici a vektor pravych stran pro kontrolni objemy  ktere
 % NEjsou na okrajich
 
@@ -31,7 +31,21 @@ for i=1:ny
             Fn = 0;
             Dn = 0;
         end
+%         
+        if vlajka1 && i == 1
+            Fn = 0;
+            Fs = 0;
+            Dn = 0;
+            Ds = 0;
+        end
         
+        if vlajka2 && j == 1
+            Fe = 0;
+            Fw = 0;
+            De = 0;
+            Dw = 0;
+        end
+%         
         ae = max([-Fe, De - Fe/2, 0]); % podle knizky strana 124
         aw = max([ Fw, Dw + Fw/2, 0]); % kapitola 5.7.2
         an = max([-Fn, Dn - Fn/2, 0]); % je tohle hybridni diferencovani
