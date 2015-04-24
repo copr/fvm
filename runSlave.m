@@ -10,7 +10,7 @@ v.s_is_d = true;
 v.w_is_d = true;
 
 n = 60;
-Mnx = 2;
+Mnx = 1;
 Mny = 2;
 
 Su = zeros(n, n);

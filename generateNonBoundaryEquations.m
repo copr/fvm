@@ -31,7 +31,7 @@ for i=1:ny
             Fn = 0;
             Dn = 0;
         end
-%         
+        
         if vlajka1 && i == 1
             Fn = 0;
             Fs = 0;
@@ -45,16 +45,18 @@ for i=1:ny
             De = 0;
             Dw = 0;
         end
-%         
+        
         ae = max([-Fe, De - Fe/2, 0]); % podle knizky strana 124
         aw = max([ Fw, Dw + Fw/2, 0]); % kapitola 5.7.2
         an = max([-Fn, Dn - Fn/2, 0]); % je tohle hybridni diferencovani
         as = max([ Fs, Ds + Fs/2, 0]);
         
+
+        
         deltaF = Fe - Fw + Fn - Fs;
         vectorOut(order) = Su(j, i);
         ap = ae + aw + an + as - Sp(j,i) + deltaF;
-        %         end
+        
         line = assign(index, ap, an, as, ae, aw, nx, ny);
         Mout(order, :) = line;
         order = order+1;

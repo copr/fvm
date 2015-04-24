@@ -1,4 +1,4 @@
-function [ Ms, Vs, Fs, Ds, Sus, Sps, indexes, oldValues] = giveMeAll( Su, Sp, allF, allD, Mnx, Mny, nx, ny)%, olds)
+function [ Ms, Vs, Fs, Ds, Sus, Sps, indexes, oldValues] = giveMeAll( Su, Sp, allF, allD, Mnx, Mny, nx, ny, olds)
 %vytvori rozdelene matice a vektory, pro kazdou matici vrati Fka Dcka a
 %zdroje ktere budou potreba pro vytvoreni rovnic
 %prejmenovat
@@ -38,7 +38,7 @@ for i=1:Mny
         %zdrojum
         Sus(index).indexes = [zeros(kj, ki), zeros(kj, Sny); zeros(Snx, ki), Su((j-1)*matriceSizeX+1:j*matriceSizeX, (i-1)*matriceSizeY+1:i*matriceSizeY)];
         Sps(index).indexes = [zeros(kj, ki), zeros(kj, Sny); zeros(Snx, ki), Sp((j-1)*matriceSizeX+1:j*matriceSizeX, (i-1)*matriceSizeY+1:i*matriceSizeY)];
-%         oldValues(index).indexes = [zeros(kj, ki), zeros(kj, Sny); zeros(Snx, ki), olds((j-1)*matriceSizeX+1:j*matriceSizeX, (i-1)*matriceSizeY+1:i*matriceSizeY)];
+        oldValues(index).indexes = [zeros(kj, ki), zeros(kj, Sny); zeros(Snx, ki), olds((j-1)*matriceSizeX+1:j*matriceSizeX, (i-1)*matriceSizeY+1:i*matriceSizeY)];
         
         inds = reshape(1:Mx*My, Mx, My) + max(max(indexes));
         if i == 1 && j == 1

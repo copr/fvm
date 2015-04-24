@@ -22,6 +22,7 @@ Mu = sparse(nu, nu);
 vectorU = zeros(nu, 1);
 Bu = sparse(2*(unx+uny-2), nu);
 vectorBu = zeros(2*(unx+uny-2),1);
+
 nv = vnx*vny;
 Mv = sparse(nv, nv);
 vectorV = zeros(nv, 1);
@@ -30,12 +31,9 @@ vectorBv = zeros(2*(vnx+vny-2),1);
 vold = zeros(vnx, vny);
 uold = zeros(unx, uny);
 sources = ones(pnx, pny);
-
-Muu = sparse(nu, nu);
-Mvv = sparse(nv, nv);
-
 it = 0;
 while it < maxIter && ~convergence(sources, my_ep)
+    
     it = it+1
     % ustar
     SU = zeros(unx, uny); SV = zeros(vnx, vny); SUp = zeros(unx, uny); SVp = zeros(vnx, vny);
@@ -53,34 +51,46 @@ while it < maxIter && ~convergence(sources, my_ep)
     
     [Mu, ~, resultU] = generateSeperateMatrices(SU, SUp, FsForU, DsForU, unx, uny, 2, 3, ustar, alfaU, uold);
     [Mv, ~, resultV] = generateSeperateMatrices(SV, SVp, FsForV, DsForV, vnx, vny, 3, 2, vstar, alfaV, vold);
+        [Muu, ~] = generateNonBoundaryEquations(SU, SUp, FsForU, DsForU, Mu, vectorU, unx, uny, 0); % vygeneruje matici pro u s rovnicemi pro vsechny neokrajove prvky
+        [Muu, ~] = relax(Mu, vectorU, alfaU, unx, uny, uold); % relaxace je uprostred aby nezmenily uz okrajove rovnice
+        [Bu, vectorBu] = generateBoundaryEquations(Bu, vectorBu, unx, uny, ustar); % do matice mu vygeneruje rovnice pro okrajove prvky
     
-    
-    [Muu, ~] = generateNonBoundaryEquations(SU, SUp, FsForU, DsForU, Muu, vectorU, unx, uny, 0, 0); % vygeneruje matici pro u s rovnicemi pro vsechny neokrajove prvky
-    [Muu, ~] = relax(Muu, vectorU, alfaU, unx, uny, uold); % relaxace je uprostred aby nezmenily uz okrajove rovnice
-
-    [Mvv, ~] = generateNonBoundaryEquations(SV, SVp, FsForV, DsForV, Mvv, vectorV, vnx, vny, 0, 0); %to same jako predtim pro v
-    [Mvv, ~] = relax(Mvv, vectorV, alfaV, vnx, vny, vold);
-
+        [Mv, vectorV] = generateNonBoundaryEquations(SV, SVp, FsForV, DsForV, Mv, vectorV, vnx, vny, 0); %to same jako predtim pro v
+        [Mv, vectorV] = relax(Mv, vectorV, alfaV, vnx, vny, vold);
+    %     [Bv, vectorBv] = generateBoundaryEquations(Bv, vectorBv, vnx, vny, vstar);
+    %
+    %     MatrixU = mergeMatrixAndBounds(Mu, Bu);
+    %     MatrixV = mergeMatrixAndBounds(Mv, Bv);
+    %     vectorUB = [vectorU; vectorBu];
+    %     vectorVB = [vectorV; vectorBv];
     uold = ustar;
     vold = vstar;
     ustar = resultU;
     vstar = resultV;
     
-    [Mp, vectorP, sources] = generetaPresureCorrectEqs(pstar, ustar, vstar, ro, deltaX, deltaY, Muu, Mvv, sources); % vytvoreni rovnci tlakovych korekci
-%     vectorP
+    % %
+    %     full(MatrixU)
+    %     waitforbuttonpress
+    %vyreseni rovnic
+    %     ustar = MatrixU\vectorUB;
+    %     ustar = ustar(1:end-2*(unx+uny-2));
+    %     ustar = reshape(ustar, unx, uny);
+    %
+    %     vstar = MatrixV\vectorVB;
+    %     vstar = vstar(1:end-2*(vnx+vny-2));
+    %     vstar = reshape(vstar, vnx, vny);
+    
+    [Mp, vectorP, sources] = generetaPresureCorrectEqs(pstar, ustar, vstar, ro, deltaX, deltaY, Mu, Mv, sources); % vytvoreni rovnci tlakovych korekci
     
     pcomma = pcg_chol(Mp, vectorP, my_ep);
     pcomma = reshape(pcomma, pnx, pny);
     
-
+    
     %korekce
     pstar = correctP(pcomma, pstar, alfaP);
-    ustar = correctU(pcomma, ustar, deltaY, Muu);
-    vstar = correctV(pcomma, vstar, deltaX, Mvv);
-    
-%     waitforbuttonpress
+    ustar = correctU(pcomma, ustar, deltaY, Mu);
+    vstar = correctV(pcomma, vstar, deltaX, Mv);
     %   [ustar, vstar] = checkOutlet(bounds, ustar, vstar);
     
-
 end
 end

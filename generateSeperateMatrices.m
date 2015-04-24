@@ -1,6 +1,6 @@
-function [bigMatrix, bigVector, result] = generateSeperateMatrices(Su, Sp, allF, allD, nx, ny, Mnx, Mny, vals);%, alfa, olds)
+function [bigMatrix, bigVector, result] = generateSeperateMatrices(Su, Sp, allF, allD, nx, ny, Mnx, Mny, vals, alfa, olds)
 %vytvori velkou matici z Mnx*Mny malych matic
-[Ms, Vs, Fs, Ds, Sus, Sps, indexes] = giveMeAll(Su, Sp, allF, allD, Mnx, Mny, nx, ny);%, olds);
+[Ms, Vs, Fs, Ds, Sus, Sps, indexes, oldValues] = giveMeAll(Su, Sp, allF, allD, Mnx, Mny, nx, ny, olds);
 
 bigMatrix = sparse(0,0);
 bigVector = [];
@@ -17,9 +17,9 @@ for i=1:Mny
             vlajka2 = true;
         end
         [matrice, vector] = generateNonBoundaryEquations(Sus(index).indexes, Sps(index).indexes, Fs(index).indexes, Ds(index).indexes, Ms(index).indexes, Vs(index).indexes, x, y, vlajka1, vlajka2);
-%         [mx, my] = size(oldValues(index).indexes)
-%         [x, y] = size(Sus(index).indexes)
-%         [matrice, vector] = relax(matrice, vector, alfa, mx, my, oldValues(index).indexes);
+        [mx, my] = size(oldValues(index).indexes);
+        [x, y] = size(Sus(index).indexes);
+        [matrice, vector] = relax(matrice, vector, alfa, mx, my, oldValues(index).indexes);
         bigMatrix = mergeMatrices(bigMatrix, matrice);
         bigVector = [bigVector; vector];
     end
@@ -39,10 +39,7 @@ bigVector = [bigVector; vectorG];
 [sizeB, ~] = size(Mb);
 
 res = bigMatrix\bigVector;
-% res = pcg_chol(bigMatrix, bigVector, 0.000000000001);
 
-%full(bigMatrix)
-%full(bigVector)
 res = res(1:end-sizeG-sizeB);
 res = getFromRes(res, indexes);
 result = getResult(res, nx, ny, Mnx, Mny);

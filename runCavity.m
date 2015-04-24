@@ -18,8 +18,8 @@ bounds.u = u; % zadani okrajovych podminek
 bounds.v = v;
 
 %type podminek 0 - zed, 1 - pohybujici se zed, 2 - inlet, 3 - outlet
-types.ntype = 0; 
-types.wtype = 1; 
+types.ntype = 1; 
+types.wtype = 0; 
 types.etype = 0; 
 types.stype = 0; 
 
@@ -29,7 +29,7 @@ bounds.types = types;
 Lx = 0.1;
 Ly = 0.1;
 nx = 20;
-ny = nx;
+ny = 20;
 gama = 0.1;
 ro = 10;
 my_ep = 0.00000001;
@@ -60,8 +60,8 @@ vykreslovaciFce = @(x) mesh(x);
 figure('name', 'magnitude');
 vykreslovaciFce(sqrt(us.^2+vs.^2));
 figure('name', 'u');
-vykreslovaciFce(us);
+vykreslovaciFce(ustar);
 figure('name', 'v');
-vykreslovaciFce(vs);
+vykreslovaciFce(vstar);
 figure('name', 'p');
 vykreslovaciFce(pstar);
