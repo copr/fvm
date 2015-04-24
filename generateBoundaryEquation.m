@@ -7,11 +7,11 @@ rhs = 0;
 
 index = (i-1)*nx + j;
 
-Fe = allF(index, 1); Fw = allF(index, 2);
-Fn = allF(index, 3); Fs = allF(index, 4);
+Fe = allF(j, i, 1); Fw = allF(j, i, 2);
+Fn = allF(j, i, 3); Fs = allF(j, i, 4);
 
-De = allD(index, 1); Dw = allD(index, 2);
-Dn = allD(index, 3); Ds = allD(index, 4);
+De = allD(j, i, 1); Dw = allD(j, i, 2);
+Dn = allD(j, i, 3); Ds = allD(j, i, 4);
 
 
 if i == 1 % zapadni kraj
