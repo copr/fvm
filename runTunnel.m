@@ -26,8 +26,8 @@ types.stype = 2;
 bounds.movingWallSpeed = 1;
 bounds.types = types;
 
-Lx = 10;
-Ly = 1;
+Lx = 1;
+Ly = 10;
 nx = 20;
 ny = 20;
 gama = 1;
@@ -35,10 +35,10 @@ ro = 10;
 my_ep = 0.0001;
 Su = 0;
 Sp = 0;
-alfaU = 0.6;
+alfaU = 0.7;
 alfaV = alfaU;
-alfaP = 0.2;
-maxIter = 300;
+alfaP = 0.1;
+maxIter = 1000;
 
 Re = ro*v.s*Ly/gama
 
