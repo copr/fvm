@@ -1,7 +1,7 @@
 v.e = 0;
 v.n = 0;
 v.s = 0;
-v.w = 1;
+v.w = 0;
 v.e_is_d = true;
 v.n_is_d = true;
 v.s_is_d = true;
@@ -19,11 +19,11 @@ bounds.v = v;
 
 %type podminek 0 - zed, 1 - pohybujici se zed, 2 - inlet, 3 - outlet
 types.ntype = 0; 
-types.wtype = 2; 
+types.wtype = 1; 
 types.etype = 0; 
 types.stype = 0; 
 
-bounds.movingWallSpeed = 0;
+bounds.movingWallSpeed = 1;
 bounds.types = types;
 
 Lx = 0.1;
