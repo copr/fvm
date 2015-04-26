@@ -8,7 +8,7 @@ v.s_is_d = true;
 v.w_is_d = true;
 u.e = 0;
 u.n = 0;
-u.s = 0.5;
+u.s = 0;
 u.w = 0;
 u.e_is_d = true;
 u.n_is_d = true;
@@ -37,8 +37,8 @@ Su = 0;
 Sp = 0;
 alfaU = 0.7;
 alfaV = alfaU;
-alfaP = 0.1;
-maxIter = 1000;
+alfaP = 0.3;
+maxIter = 500;
 
 Re = ro*v.s*Ly/gama
 
