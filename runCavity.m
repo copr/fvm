@@ -1,3 +1,5 @@
+clear;
+
 v.e = 0;
 v.n = 0;
 v.s = 0;
@@ -23,16 +25,16 @@ types.wtype = 0;
 types.etype = 0; 
 types.stype = 0; 
 
-bounds.movingWallSpeed = 0;
+bounds.movingWallSpeed = 1;
 bounds.types = types;
 
 Lx = 0.1;
 Ly = 0.1;
-nx = 100;
+nx = 20;
 ny = nx;
-gama = 0.001;
+gama = 0.01;
 ro = 10;
-my_ep = 0.000000001;
+my_ep = 0.000000000001;
 Su = 0;
 Sp = 0;
 alfaU = 0.7;
@@ -42,9 +44,14 @@ maxIter = 500;
 
 Re = ro*bounds.movingWallSpeed*Ly/gama
 
+
+GhiaU100 = dlmread('GhiaU100');
+GhiaU100y = dlmread('GhiaU100y');
+GhiaV100 = dlmread('GhiaV100');
+GhiaV100x = dlmread('GhiaV100x');
+
 [ustar, vstar, pstar] = simple(nx,ny,bounds,Su, Sp,Lx,Ly,gama, ro, my_ep, alfaU, alfaV, alfaP, maxIter);
 [us,vs] = getCenters(ustar, vstar);
-% streamline(0:nx-1, 0:ny-1, us, vs, 1, 1);
 
 [x,y] = meshgrid(0:nx-1, 0:ny-1);
 
@@ -55,7 +62,25 @@ startx = 0:nx-1;
 starty = 0:ny-1;
 streamline(x,y,us,vs,startx,starty)
 
-%ustar(:, floor(nx/2))
+[~, uny] = size(ustar);
+
+deltaY = Ly/ny;
+deltaX = Lx/nx;
+
+figure('name', 'porovnani U');
+hold on;
+plot(GhiaU100, GhiaU100y, 'r*')
+plot(ustar(2:end-1, ny/2), deltaY/2:deltaY:Ly)
+hold off;
+figure('name', 'porovnani V');
+hold on;
+plot(GhiaV100, GhiaV100x, 'g*')
+plot(vstar(nx/2, 2:end-1), deltaX/2:deltaX:Lx)
+hold off;
+
+dlmwrite(sprintf('%s%d%d.dat', 'ustar', Re, nx), ustar)
+dlmwrite(sprintf('%s%d%d.dat', 'vstar', Re, nx), vstar)
+dlmwrite(sprintf('%s%d%d.dat', 'pstar', Re, nx), pstar)
 
 vykreslovaciFce = @(x) surface(x);
 figure('name', 'magnitude');
