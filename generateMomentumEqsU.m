@@ -33,6 +33,11 @@ for i=1:uny
 %         if j == unx
 %             Spom
 %         end
+% ae = max3(-Fe, De - Fe/2, 0); % podle knizky strana 124
+% aw = max3( Fw, Dw + Fw/2, 0); % kapitola 5.7.2
+% an = max3( Fs, Ds + Fs/2, 0); % je tohle hybridni diferencovani
+% as = max3(-Fn, Dn - Fn/2, 0); % chtel jsem to obecneji ale asi to nejde tak lehce
+% ap = ae + aw + an + as - Sp(j,i);
 
         [ae, aw, an, as, be, bw, bn, bs, Spom] = hybrid(index, obj, obi, Fe, Fw, Fn, Fs, ...
             De, Dw, Dn, Ds, Suom, Spom, deltaX, deltaY, um, vrb, bounds.u, unx, uny, 1/2, ustar); % zatim to asi nefachci pro outlet
