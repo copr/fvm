@@ -27,19 +27,31 @@ bounds.types = types;
 Lx = 0.1;
 Ly = 0.1;
 
-n = 20;
+nx = 40;
+ny = nx;
 bounds.v = v;
+
+gama = 0.001;
+ro = 1;
 
 Re = u.n * ro * Lx/ gama
 
 vykreslovaciFce = @(x) surface(x);
 
-gama = 0.01;
-ro = 1;
 
-[ustar, vstar, pstar] = simpleAlgorithm(n,n,bounds,0,0,0.1,0.1,gama, ro, 0.000001);
+
+[ustar, vstar, pstar] = simpleAlgorithm(nx,ny,bounds,0,0,0.1,0.1,gama, ro, 0.000001);
+
+figure('name', 'u');
+vykreslovaciFce(ustar);
+figure('name', 'v');
+vykreslovaciFce(vstar);
+figure('name', 'p');
+vykreslovaciFce(pstar);
 
 [us,vs] = getCenters(ustar, vstar);
+size(us)
+size(vs)
 
 [x,y] = meshgrid(0:nx-1, 0:ny-1);
 
@@ -50,9 +62,6 @@ startx = 0:nx-1;
 starty = 0:ny-1;
 streamline(x,y,us,vs,startx,starty)
 
-figure('name', 'u');
-vykreslovaciFce(ustar);
-figure('name', 'v');
-vykreslovaciFce(vstar);
-figure('name', 'p');
-vykreslovaciFce(pstar);
+figure('name', 'magnitude');
+vykreslovaciFce(sqrt(us.^2 + vs.^2));
+
