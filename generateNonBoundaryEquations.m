@@ -1,14 +1,12 @@
-function [Mout, vectorOut] = generateNonBoundaryEquations(Su, Sp, allF, allD, Min, vectorIn, nx, ny, deltaX, deltaY)
+function [Mout, vectorOut] = generateNonBoundaryEquations(Su, Sp, allF, allD, Min, vectorIn, nx, ny)
 % Vygeneruje Matici a vektor pravych stran pro kontrolni objemy  ktere
 % NEjsou na okrajich
 
 Mout = Min;
 vectorOut = vectorIn;
-
 for j=2:nx-1
     for i=2:ny-1
         index = (i-1)*nx + j; 
-        
         Fe = allF(index, 1); Fw = allF(index, 2);
         Fn = allF(index, 3); Fs = allF(index, 4);
         

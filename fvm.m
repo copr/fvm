@@ -18,7 +18,7 @@ for j=1:nx
         if isOnBoundary(j, i, nx, ny)
             [equation, rhs] = generateBoundaryEquation(i, j, bounds, nx, ny, allF, allD);
         else
-            [equation, rhs] = generateNonBoundaryEquation(i, j, deltaX*deltaY*Su, deltaX*deltaY*Sp, allF, allD, nx, ny);
+            [equation, rhs] = generateNonBoundaryEquation(j, i, deltaX*deltaY*Su, deltaX*deltaY*Sp, allF, allD, nx, ny);
         end
         M(index, :) = equation;
         vector(index) = rhs;

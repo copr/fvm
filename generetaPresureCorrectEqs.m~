@@ -50,14 +50,14 @@ for i=1:ny
                 as = ro*deltaX*d;
             end
             
-%             if obstacles(j, i)
-%                 line = assign(index, 1, 0, 0, 0, 0, nx, ny);
-%                 Source = 0;
-%             else
+            if obstacles(j, i)
+                line = assign(index, 10^10, 0, 0, 0, 0, nx, ny);
+                Source = 0;
+            else
                 Source = ro*ul*deltaY - ro*ur*deltaY + ro*vb*deltaX - ro*vt*deltaX;
                 ap = as + an + ae + aw;
                 line = assign(index, ap, an, as, ae, aw, nx, ny);
-%             end
+            end
             sources(j, i) = Source;
             Mp(index,1:end) = line;
             vectorP(index) = Source;
