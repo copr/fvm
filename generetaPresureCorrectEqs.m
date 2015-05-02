@@ -1,4 +1,4 @@
-function [Mp, vectorP, sources] = generetaPresureCorrectEqs(pstar, ustar, vstar, bounds, ro, gama, Su, Sp, deltaX, deltaY, Mu, Mv, sources, alfa)
+function [Mp, vectorP] = generetaPresureCorrectEqs(pstar, ustar, vstar, bounds, ro, gama, Su, Sp, deltaX, deltaY, Mu, Mv)
 %generuje rovnice pro tlakove korecke
 [unx, uny] = size(ustar);
 [vnx, vny] = size(vstar);
@@ -72,7 +72,7 @@ for i=1:pny
        end
         
         Source = ro*ul*deltaY - ro*ur*deltaY + ro*vb*deltaX - ro*vt*deltaX;
-        sources(obj, obi) = Source;
+%         sources(obj, obi) = Source;
         ap = as + an + ae + aw;
         line = assign(index, ap, an, as, ae, aw, pnx, pny);
         Mp(index,1:end) = line;
