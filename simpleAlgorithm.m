@@ -15,21 +15,24 @@ VSu = zeros(size(vstar));
 [unx, uny] = size(ustar);
 [vnx, vny] = size(vstar);
 [pnx, pny] = size(pstar);
+vectorP = ones(pnx*pny, 1);
 vold = zeros(vnx, vny);
 uold = zeros(unx, uny);
-sources = ones(pnx,pny);
-alfaU = 0.8; %relaxace rychlosti
-alfaP = 0.4; %relaxace tlaku
+alfaU = 0.7; %relaxace rychlosti
+alfaV = 0.7;
+alfaP = 0.3; %relaxace tlaku
 it = 0;
-while it < 100 && ~convergence(sources(2:end-1,2:end-1), my_ep)
+while it < 1000 && ~convergence(vectorP, my_ep)
     [ustar, vstar] = checkOutlet(bounds, ustar, vstar);
     it = it + 1
     [Mu, vectorU] = generateMomentumEqsU(pstar, ustar, vstar, bounds, ro, gama, USu, USp, deltaX, deltaY, alfaU, uold);
-    [Mv, vectorV] = generateMomentumEqsV(pstar, ustar, vstar, bounds, ro, gama, VSu, VSp, deltaX, deltaY, alfaU, vold);
+    [Mv, vectorV] = generateMomentumEqsV(pstar, ustar, vstar, bounds, ro, gama, VSu, VSp, deltaX, deltaY, alfaV, vold);
+    
+%     full(Mu)
     
     uold = ustar;
     vold = vstar;
-% %     
+
     ustarIn = Mu\vectorU;
     vstarIn = Mv\vectorV;
 %     ustarIn = pcg_chol(Mu, vectorU, my_ep);
@@ -43,8 +46,7 @@ while it < 100 && ~convergence(sources(2:end-1,2:end-1), my_ep)
     vstar(2:end-1, 2:end-1) = vstarIn;
     
     
-    [Mp, vectorP, sources] = generetaPresureCorrectEqs(pstar, ustar, vstar, bounds, ro, gama, Su, Sp, deltaX, deltaY, Mu, Mv, sources, alfaU);
-
+    [Mp, vectorP] = generetaPresureCorrectEqs(pstar, ustar, vstar, bounds, ro, gama, Su, Sp, deltaX, deltaY, Mu, Mv);
 %     
     Mp(1, :) = zeros(1, length(Mp(1,:)));
     Mp(1,1) = 1;
@@ -59,7 +61,6 @@ while it < 100 && ~convergence(sources(2:end-1,2:end-1), my_ep)
     vstar = correctV(pcomma, vstar, deltaX, Mv);
    
 end
-it
 ustar = uold;
 vstar = vold;
 end

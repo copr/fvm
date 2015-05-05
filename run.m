@@ -17,7 +17,7 @@ u.w_is_d = true;
 bounds.u = u;
 
 % 0 - zed, 1 - pohybujici se zed, 2 - inlet, 3 - outlet
-types.ntype = 1; 
+types.ntype = 2; 
 types.wtype = 0; 
 types.etype = 0; 
 types.stype = 0; 
@@ -27,11 +27,11 @@ bounds.types = types;
 Lx = 0.1;
 Ly = 0.1;
 
-nx = 40;
+nx = 70;
 ny = nx;
 bounds.v = v;
 
-gama = 0.001;
+gama = 0.01;
 ro = 1;
 
 Re = u.n * ro * Lx/ gama
@@ -50,9 +50,6 @@ figure('name', 'p');
 vykreslovaciFce(pstar);
 
 [us,vs] = getCenters(ustar, vstar);
-size(us)
-size(vs)
-
 [x,y] = meshgrid(0:nx-1, 0:ny-1);
 
 figure
